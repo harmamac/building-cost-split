@@ -8,214 +8,237 @@
 <meta name="description" content="يوزّع مصروفات المبنى على 13 شقة بحسب المساحة، مع تقريب دقيق وشرح خطوات الحساب.">
 <title>توزيع تكاليف المبنى</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700&display=swap">
 <style>
-/* التخطيط: ورقة عمل واحدة من اليمين إلى اليسار. شريط ملخص، ثم بنود المصروفات، ثم جدول الشقق، ثم تفاصيل الحساب. */
+/* التخطيط: عمود واحد بخط كبير. ثلاث تبويبات كبيرة: النتيجة، المصروفات، المساحات. النتيجة تعرض رقماً واحداً لكل شقة، والضغط على الشقة يشرح الحساب بجمل بسيطة. */
 :root {
-  --bg: #F2F5F9;
+  font-size: 112.5%;
+  --bg: #F5F7FA;
   --surface: #FFFFFF;
-  --surface-2: #E8EDF4;
-  --line: #D3DAE5;
-  --ink: #131F2E;
-  --ink-2: #4D5D75;
-  --accent: #1B4F9C;
+  --surface-2: #E9EEF5;
+  --line: #CBD4E1;
+  --ink: #0F1B2A;
+  --ink-2: #3D4C61;
+  --accent: #1A4F9C;
   --accent-ink: #FFFFFF;
-  --accent-soft: #E1EAF8;
-  --good: #1B7A4B;
-  --warn: #9A5B00;
-  --warn-soft: #FFF1D6;
-  --bad: #B3261E;
+  --accent-soft: #E0EAF8;
+  --bar: #8DB0E6;
+  --good: #14633D;
+  --good-soft: #E3F4EA;
+  --warn: #7A4700;
+  --warn-soft: #FFF3D1;
+  --bad: #A61E17;
   --font-display: 'Noto Kufi Arabic', 'IBM Plex Sans Arabic', Tahoma, system-ui, sans-serif;
   --font-body: 'IBM Plex Sans Arabic', 'Noto Naskh Arabic', Tahoma, system-ui, sans-serif;
-  --font-num: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   color-scheme: light;
 }
+
 * { box-sizing: border-box; }
 body {
   background: var(--bg);
   color: var(--ink);
-  font: 16px/1.8 var(--font-body);
+  font: 1rem/1.85 var(--font-body);
   text-rendering: optimizeLegibility;
   font-kerning: normal;
-  padding-block: 28px 56px;
+  padding-block: 20px 120px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 28px; }
-h1, h2 { font-family: var(--font-display); margin: 0; text-wrap: balance; line-height: 1.45; }
-h1 { font-size: 2rem; font-weight: 700; }
-h2 { font-size: 1.25rem; font-weight: 600; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
+h1, h2 { font-family: var(--font-display); margin: 0; text-wrap: balance; line-height: 1.5; }
+h1 { font-size: 1.9rem; font-weight: 700; }
+h2 { font-size: 1.3rem; font-weight: 700; }
 p { margin: 0; text-wrap: pretty; }
-.ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
-output { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
-.eyebrow { font: 600 0.95rem/1.4 var(--font-body); color: var(--accent); }
-.muted { color: var(--ink-2); }
-
-/* الرأس */
-.top { display: flex; flex-wrap: wrap; gap: 16px 24px; justify-content: space-between; align-items: flex-end; }
-.top > div { min-width: 0; }
-.top .lead { margin-top: 8px; color: var(--ink-2); max-width: 58ch; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; }
 button, select, input { font: inherit; color: inherit; }
-.btn {
-  appearance: none; cursor: pointer; border-radius: 6px; padding: 6px 16px; min-height: 40px; line-height: 1.5;
-  border: 1px solid var(--line); background: var(--surface); font-weight: 500;
-}
-.btn:hover { border-color: var(--accent); }
-.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-.btn.primary:hover { filter: brightness(1.08); }
-.btn.ghost { background: transparent; color: var(--ink-2); }
-.btn.armed { border-color: var(--bad); color: var(--bad); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.status { min-height: 1.8em; font-size: 0.95rem; color: var(--ink-2); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.status button { appearance: none; background: none; border: 0; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font-weight: 600; }
+.ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-2); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 
-.notice { border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; background: var(--warn-soft); color: var(--warn); font-size: 0.95rem; font-weight: 500; }
+/* التبويبات */
+.tabbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 6px 8px; }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 6px; background: var(--surface-2); border-radius: 16px; }
+.tab { appearance: none; cursor: pointer; min-height: 56px; border: 2px solid transparent; border-radius: 12px; background: transparent; color: var(--ink-2); font-weight: 700; font-size: 1.05rem; padding: 4px 6px; line-height: 1.4; }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+.tab:hover:not([aria-selected="true"]) { border-color: var(--accent); color: var(--accent); }
 
-/* شريط الملخص */
-.strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
-.strip > div { background: var(--surface); padding: 14px 18px; min-width: 0; }
-.strip .k { font-size: 0.88rem; line-height: 1.5; font-weight: 500; color: var(--ink-2); }
-.strip .v { margin-top: 4px; font: 600 1.45rem/1.4 var(--font-num); overflow-wrap: anywhere; }
-.strip .v small { font: 500 0.88rem var(--font-body); color: var(--ink-2); margin-inline-start: 6px; }
+/* الأزرار */
+.btn { appearance: none; cursor: pointer; min-height: 56px; padding: 8px 20px; border-radius: 12px; border: 2px solid var(--accent); background: var(--surface); color: var(--accent); font-weight: 700; font-size: 1.05rem; line-height: 1.5; }
+.btn:hover { background: var(--accent-soft); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.1); }
+.btn.light { background: #fff; color: var(--accent); border-color: #fff; }
+.btn.danger { border-color: var(--bad); color: var(--bad); background: var(--surface); }
+.btn.danger:hover { background: #FBE9E7; }
+.btn.armed { background: var(--bad); color: #fff; border-color: var(--bad); }
+.btn.block { width: 100%; }
+.btn.quiet { border-color: var(--line); color: var(--ink-2); font-weight: 600; }
+.btn.small { min-height: 48px; padding: 6px 16px; }
 
-/* الأقسام */
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 22px; min-width: 0; }
-.panel-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px 20px; margin-bottom: 16px; }
-.panel-head p { color: var(--ink-2); font-size: 0.95rem; margin-top: 2px; max-width: 64ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; min-width: 0; }
+.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 18px; border-radius: 14px; background: var(--warn-soft); color: var(--warn); font-weight: 600; border: 1px solid #E8C879; }
+.notice p { flex: 1 1 14em; }
+
+/* بطاقة الإجمالي */
+.hero { background: var(--accent); color: var(--accent-ink); border-radius: 18px; padding: 22px; display: grid; gap: 6px; justify-items: start; }
+.hero-k { font-size: 1.1rem; font-weight: 600; opacity: .95; }
+.hero-v { font: 700 2.5rem/1.3 var(--font-body); }
+.hero-v small { font-size: 1.2rem; font-weight: 600; margin-inline-start: 8px; }
+.hero-s { font-size: 1.05rem; }
+
+/* التبديل بين سنوي وشهري */
+.view-row { display: grid; gap: 6px; }
+.lab { font-weight: 700; font-size: 1.05rem; color: var(--ink); padding: 0; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; margin-top: 6px; }
+.seg label { position: relative; display: block; }
+.seg input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.seg span { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 6px 10px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); font-weight: 600; text-align: center; line-height: 1.5; }
+.seg input:hover + span { border-color: var(--accent); }
+.seg input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.seg input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* قائمة الشقق */
+.units { display: grid; gap: 10px; }
+details.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+details.unit[open] { border-color: var(--accent); }
+details.unit summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 4px 14px; padding: 14px 18px; min-height: 76px; border-radius: 16px; }
+details.unit summary::-webkit-details-marker { display: none; }
+details.unit summary:hover { background: var(--accent-soft); }
+.u-name { font-weight: 700; font-size: 1.2rem; line-height: 1.5; }
+.u-area { display: block; font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
+.u-amt { font-weight: 700; font-size: 1.6rem; line-height: 1.3; white-space: nowrap; }
+.u-amt small { font-size: 0.95rem; font-weight: 600; color: var(--ink-2); margin-inline-start: 6px; }
+.chev { width: 12px; height: 12px; border-right: 3px solid var(--ink-2); border-bottom: 3px solid var(--ink-2); transform: rotate(45deg); margin-block: -4px 4px; }
+details.unit[open] .chev { transform: rotate(225deg); margin-block: 4px -4px; }
+.u-bar { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-top: 4px; }
+.u-bar i { display: block; height: 100%; background: var(--bar); border-radius: 4px; }
+.u-detail { padding: 4px 18px 18px; display: grid; gap: 10px; }
+.u-detail .lines { list-style: none; margin: 0; padding: 0; }
+.u-detail .lines li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.u-detail .lines li.sum { font-weight: 700; border-bottom: 0; }
+.totalbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--surface-2); border-radius: 14px; font-weight: 700; font-size: 1.25rem; }
+.check { font-weight: 600; }
+.check.ok { color: var(--good); background: var(--good-soft); padding: 10px 16px; border-radius: 12px; }
+
+.method ol { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
+.method li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
+.method li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.method .foot { margin-top: 12px; color: var(--ink-2); }
+.share-row { display: grid; gap: 10px; margin-top: 12px; }
 
 /* الحقول */
-.f { display: grid; gap: 2px; min-width: 0; align-content: end; }
-.f > span { font-size: 0.86rem; line-height: 1.6; font-weight: 600; color: var(--ink-2); }
-input[type=text], select {
-  width: 100%; min-height: 40px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); line-height: 1.5;
-}
-input.n { direction: ltr; text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
-input[aria-invalid="true"] { border-color: var(--bad); }
-input:hover, select:hover { border-color: var(--ink-2); }
+.field { display: grid; gap: 4px; min-width: 0; }
+input[type=text] { width: 100%; min-height: 56px; padding: 8px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); font-size: 1.1rem; line-height: 1.5; }
+input[type=text]:hover { border-color: var(--ink-2); }
+input[type=text]:focus-visible { border-color: var(--accent); outline-offset: 1px; }
+input.n { direction: ltr; text-align: right; font-variant-numeric: tabular-nums; }
+input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 
-/* بنود المصروفات */
-.exp { position: relative; display: grid; align-items: end; gap: 10px 14px; padding: 16px 0;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr) minmax(0, .7fr) minmax(0, 1fr) minmax(0, .9fr) minmax(0, 1.1fr) 40px; border-top: 1px solid var(--line); }
-.exp:first-child { border-top: 0; padding-top: 0; }
-.f-lump { grid-column: span 2; }
-.f-note { grid-column: 1 / -1; }
-.f-out output { display: block; direction: ltr; text-align: right; font-size: 1.1rem; font-weight: 600; line-height: 40px; }
-.f-out small { font-size: 0.82rem; line-height: 1.5; color: var(--ink-2); }
-.del { appearance: none; cursor: pointer; width: 40px; height: 40px; border-radius: 5px; border: 1px solid var(--line); background: transparent; color: var(--ink-2); font-size: 1.3rem; line-height: 1; }
-.del:hover { color: var(--bad); border-color: var(--bad); }
-.empty { padding: 18px 0 6px; color: var(--ink-2); }
-.add-row { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+/* المصروفات */
+.exp { display: grid; gap: 16px; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.result-line { display: grid; gap: 2px; padding: 14px 16px; background: var(--accent-soft); border-radius: 12px; }
+.result-line b { font-size: 1.5rem; line-height: 1.4; }
+.result-line b small { font-size: 1rem; margin-inline-start: 6px; }
+.how-line { color: var(--ink-2); font-size: 0.95rem; line-height: 1.8; }
+.empty { padding: 8px 2px; color: var(--ink-2); }
 
-/* الجداول */
-.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
-table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.97rem; }
-th, td { padding: 6px 14px; border-bottom: 1px solid var(--line); text-align: start; vertical-align: middle; white-space: nowrap; background: var(--surface); line-height: 1.7; }
-thead th { font-size: 0.88rem; line-height: 1.55; font-weight: 600; color: var(--ink-2); background: var(--surface-2); white-space: normal; vertical-align: bottom; padding-block: 10px; }
-td.num { direction: ltr; text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
-td.txt { text-align: start; }
-tbody tr:hover td, tbody tr:hover th { background: var(--accent-soft); }
-.matrix th:first-child, .matrix td:first-child { position: sticky; inset-inline-start: 0; z-index: 1; border-inline-end: 1px solid var(--line); min-width: 132px; }
-.matrix thead th:first-child { z-index: 2; }
-.matrix td input, .matrix th input { min-height: 34px; padding: 2px 8px; }
-.in-name { min-width: 108px; font-weight: 500; }
-.in-area { width: 100px; }
-.matrix .strong { font-weight: 600; }
-.matrix tr.target td, .matrix tr.target th { background: var(--accent-soft); color: var(--ink); font-size: 0.9rem; }
-.matrix tr.target th { font-weight: 500; color: var(--ink-2); }
-.matrix tfoot td, .matrix tfoot th { font-weight: 600; background: var(--surface-2); border-top: 2px solid var(--ink); border-bottom: 0; }
-.matrix tfoot tr.check td, .matrix tfoot tr.check th { font-weight: 500; font-size: 0.88rem; border-top: 1px solid var(--line); color: var(--ink-2); }
-.ok { color: var(--good) !important; }
-.bad { color: var(--bad) !important; }
-td.share { min-width: 90px; }
-.bar { display: block; height: 3px; margin-top: 2px; border-radius: 2px; background: var(--accent); opacity: .55; }
-.exp-h { min-width: 124px; }
+/* المساحات */
+.areas { display: grid; gap: 10px; margin-top: 12px; }
+.arow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: center; }
+.a-field { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.a-field span { white-space: nowrap; color: var(--ink-2); font-weight: 600; }
+.ahead { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; font-weight: 700; color: var(--ink-2); font-size: 0.95rem; }
+.total-line { margin-top: 14px; padding: 14px 16px; background: var(--surface-2); border-radius: 12px; font-weight: 700; font-size: 1.15rem; }
 
-/* تفاصيل الحساب */
-.formula { margin: 0 0 14px; padding: 12px 16px; background: var(--surface-2); border-radius: 6px; font-size: 0.97rem; line-height: 2; overflow-wrap: anywhere; }
-.formula .ltr { font-weight: 600; }
-.how { margin-top: 14px; color: var(--ink-2); font-size: 0.95rem; max-width: 74ch; }
-.sel { display: grid; gap: 2px; min-width: 240px; }
-.sel > span { font-size: 0.86rem; line-height: 1.6; font-weight: 600; color: var(--ink-2); }
+.foot-row { display: flex; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
 
-@media (max-width: 820px) {
+.toast { position: fixed; inset-inline: 0; bottom: 0; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 18px;
+  padding: 14px max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: #fff; font-weight: 600; }
+.toast button { appearance: none; cursor: pointer; min-height: 44px; padding: 4px 18px; border-radius: 10px; border: 2px solid #fff; background: transparent; color: #fff; font-weight: 700; }
+
+@media (max-width: 480px) {
   h1 { font-size: 1.6rem; }
-  .panel { padding: 14px; }
-  .exp { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .f-name, .f-mode { grid-column: 1 / -1; }
-  .f-name { padding-inline-end: 48px; }
-  .del { position: absolute; top: 16px; inset-inline-end: 0; }
-  .exp:first-child .del { top: 0; }
-  .f-lump { grid-column: 1 / -1; }
+  .hero-v { font-size: 2.1rem; }
+  .u-amt { font-size: 1.4rem; }
+  .card { padding: 16px; }
+  .arow, .ahead { grid-template-columns: 1fr; }
+  .ahead { display: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
-  .btn, input, select { transition: border-color .12s, filter .12s; }
+  .chev { transition: transform .15s; }
 }
 </style>
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
 <body>
 <div class="wrap" dir="rtl" lang="ar">
-  <header class="top">
-    <div>
-      <div class="eyebrow">توزيع المصروفات التشغيلية</div>
-      <h1>توزيع تكاليف المبنى</h1>
-      <p class="lead">يُوزَّع كل مصروف على الشقق الـ13 بنسبة مساحة كل شقة. الشقة الأكبر تدفع حصة أكبر، ومجموع الحصص يساوي إجمالي المصروف تماماً.</p>
-    </div>
-    <div class="actions">
-      <button class="btn" id="btn-copy" type="button">نسخ الجدول</button>
-      <button class="btn" id="btn-csv" type="button" hidden>حفظ ملف CSV</button>
-      <button class="btn ghost" id="btn-reset" type="button">العودة للبيانات التجريبية</button>
-    </div>
-  </header>
+  <header><h1>توزيع تكاليف المبنى</h1></header>
 
-  <div class="status" id="status" role="status" aria-live="polite"></div>
-  <div class="notice" id="notice" hidden></div>
+  <div class="tabbar" id="tabbar">
+    <div class="tabs" role="tablist" aria-label="أقسام الصفحة">
+      <button class="tab" id="tab-result" role="tab" aria-selected="true" aria-controls="panel-result" type="button">النتيجة</button>
+      <button class="tab" id="tab-expenses" role="tab" aria-selected="false" aria-controls="panel-expenses" type="button">المصروفات</button>
+      <button class="tab" id="tab-areas" role="tab" aria-selected="false" aria-controls="panel-areas" type="button">المساحات</button>
+    </div>
+  </div>
 
-  <section class="strip" aria-label="الملخص">
-    <div><div class="k">إجمالي المصروفات السنوية</div><div class="v"><span class="ltr" id="s-annual">0.00</span><small>ر.س</small></div></div>
-    <div><div class="k">المبلغ الشهري (÷ 12)</div><div class="v"><span class="ltr" id="s-month">0.00</span><small>ر.س</small></div></div>
-    <div><div class="k">إجمالي المساحة</div><div class="v"><span class="ltr" id="s-area">0.00</span><small>م²</small></div></div>
-    <div><div class="k">متوسط التكلفة للمتر المربع سنوياً</div><div class="v"><span class="ltr" id="s-rate">0.00</span><small>ر.س</small></div></div>
+  <!-- النتيجة -->
+  <section id="panel-result" role="tabpanel" aria-labelledby="tab-result" class="wrap" style="gap:18px">
+    <div class="notice" id="notice-result" hidden></div>
+    <div class="hero" id="hero"></div>
+    <div id="result-body" style="display:grid;gap:18px">
+      <fieldset class="view-row" id="view-seg">
+        <legend class="lab">اعرض ما تدفعه كل شقة:</legend>
+        <div class="seg">
+          <label><input type="radio" name="view" value="year" checked><span>في السنة</span></label>
+          <label><input type="radio" name="view" value="month"><span>في الشهر</span></label>
+        </div>
+      </fieldset>
+      <div class="units" id="units"></div>
+      <div class="totalbar" id="totalbar"></div>
+      <p class="check" id="check"></p>
+      <section class="card method">
+        <h2>كيف نحسب؟</h2>
+        <ol>
+          <li><span>نجمع مساحات الشقق كلها.</span></li>
+          <li><span>نحسب نسبة كل شقة من المجموع: مساحتها ÷ مجموع المساحات.</span></li>
+          <li><span>تدفع كل شقة هذه النسبة من كل مصروف.</span></li>
+        </ol>
+        <p class="foot">المبالغ محسوبة بالهللة، ومجموعها يساوي إجمالي المصروفات تماماً دون زيادة أو نقص.</p>
+      </section>
+      <section class="card">
+        <h2>مشاركة النتيجة</h2>
+        <div class="share-row">
+          <button class="btn small" id="btn-text" type="button">نسخ كنص للواتساب</button>
+          <button class="btn small" id="btn-copy" type="button">نسخ كجدول لإكسل</button>
+          <button class="btn small" id="btn-csv" type="button" hidden>حفظ ملف CSV</button>
+        </div>
+      </section>
+    </div>
   </section>
 
-  <section class="panel" aria-labelledby="h-exp">
-    <div class="panel-head">
-      <div>
-        <h2 id="h-exp">المصروفات التشغيلية</h2>
-        <p>أضف سطراً لكل مصروف. أدخل العدد وسعر الوحدة، أو مبلغاً إجمالياً واحداً. المصروفات الشهرية تُضرب في 12 للحصول على المبلغ السنوي.</p>
-      </div>
-    </div>
-    <div id="expenses"></div>
-    <div class="add-row">
-      <button class="btn primary" id="btn-add" type="button">إضافة مصروف</button>
+  <!-- المصروفات -->
+  <section id="panel-expenses" role="tabpanel" aria-labelledby="tab-expenses" class="wrap" style="gap:18px" hidden>
+    <p class="muted">اكتب المصروفات التي يدفعها المبنى كله. سنقسّم كل مصروف على الشقق حسب مساحتها.</p>
+    <div id="expenses" style="display:grid;gap:18px"></div>
+    <button class="btn primary block" id="btn-add" type="button">+ إضافة مصروف جديد</button>
+  </section>
+
+  <!-- المساحات -->
+  <section id="panel-areas" role="tabpanel" aria-labelledby="tab-areas" class="wrap" style="gap:18px" hidden>
+    <div class="notice" id="notice-areas" hidden></div>
+    <div class="card">
+      <p class="muted">اكتب مساحة كل شقة بالمتر المربع. ويمكنك تغيير اسم الشقة.</p>
+      <div class="areas" id="areas"></div>
+      <div class="total-line" id="area-total"></div>
     </div>
   </section>
 
-  <section class="panel" aria-labelledby="h-matrix">
-    <div class="panel-head">
-      <div>
-        <h2 id="h-matrix">ما تدفعه كل شقة</h2>
-        <p>عدّل أسماء الشقق ومساحاتها مباشرة في الجدول. المبالغ بالريال السعودي في السنة.</p>
-      </div>
-    </div>
-    <div class="scroll"><table class="matrix" id="matrix"></table></div>
-    <p class="how">الأعمدة السنوية دقيقة، ومجموع كل عمود يساوي إجمالي المصروف. أما عمود «شهرياً» فهو الإجمالي السنوي لكل شقة ÷ 12 مقرَّباً لأقرب هللة، لذلك قد يختلف مجموعه عن الإجمالي السنوي ÷ 12 بفارق بضع هللات.</p>
-  </section>
-
-  <section class="panel" aria-labelledby="h-how">
-    <div class="panel-head">
-      <div>
-        <h2 id="h-how">كيف تُحسب الأرقام</h2>
-        <p>اختر مصروفاً لترى طريقة الحساب لكل شقة، بما في ذلك المبلغ الدقيق قبل التقريب.</p>
-      </div>
-      <label class="sel" for="bd-exp"><span>المصروف</span><select id="bd-exp"></select></label>
-    </div>
-    <div class="formula" id="bd-formula"></div>
-    <div class="scroll"><table id="bd-table"></table></div>
-    <p class="how">تُحسب المبالغ بالهللة (0.01 ريال). تُقرَّب كل حصة دقيقة إلى الأسفل، ثم تُوزَّع الهللات المتبقية واحدةً واحدة على الشقق ذات أكبر الكسور. بهذا تبقى كل حصة ضمن هللة واحدة من قيمتها الدقيقة، ويساوي مجموع الحصص إجمالي المصروف تماماً دون زيادة أو نقص.</p>
-  </section>
+  <div class="foot-row"><button class="btn quiet small" id="btn-reset" type="button">البدء من جديد (يمسح كل البيانات)</button></div>
 </div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
 //#core-start
@@ -253,17 +276,20 @@ function fmtScaled(v, dec, group) {
   var frac = dec ? '.' + (v % p).toString().padStart(dec, '0') : '';
   return (neg ? '-' : '') + whole + frac;
 }
+function periodHalalas(e) {
+  if (e.mode === 'lump') return parseScaled(e.lump, 2);
+  return (parseScaled(e.qty, 3) * parseScaled(e.unit, 2) + 500n) / 1000n;
+}
 function annualHalalas(e) {
-  var h;
-  if (e.mode === 'lump') h = parseScaled(e.lump, 2);
-  else h = (parseScaled(e.qty, 3) * parseScaled(e.unit, 2) + 500n) / 1000n;
+  var h = periodHalalas(e);
   return e.per === 'month' ? h * 12n : h;
 }
-function allocate(total, areas) {
+function allocate(total, areas, offset) {
+  offset = offset || 0;
   var n = areas.length, sum = 0n, i;
   for (i = 0; i < n; i++) sum += areas[i];
   var shares = new Array(n).fill(0n), nums = new Array(n).fill(0n), rems = new Array(n).fill(0n);
-  if (sum === 0n || total === 0n) return { shares: shares, nums: nums, sum: sum };
+  if (sum === 0n || total === 0n) return { shares: shares, nums: nums, sum: sum, used: 0 };
   var given = 0n;
   for (i = 0; i < n; i++) {
     nums[i] = total * areas[i];
@@ -275,12 +301,11 @@ function allocate(total, areas) {
   var order = areas.map(function (_, k) { return k; }).sort(function (a, b) {
     if (rems[a] !== rems[b]) return rems[a] > rems[b] ? -1 : 1;
     if (areas[a] !== areas[b]) return areas[a] > areas[b] ? -1 : 1;
-    return a - b;
+    return ((a - offset) % n + n) % n - ((b - offset) % n + n) % n;
   });
   for (var k = 0; k < left; k++) shares[order[k]] += 1n;
-  return { shares: shares, nums: nums, sum: sum };
+  return { shares: shares, nums: nums, sum: sum, used: left };
 }
-// الحصة الدقيقة بأجزاء من عشرة آلاف من الريال، مقرَّبة للأعلى عند المنتصف
 function exact4(num, sum) {
   if (sum === 0n) return 0n;
   return (num * 200n + sum) / (sum * 2n);
@@ -288,57 +313,66 @@ function exact4(num, sum) {
 //#core-end
 
 (function () {
-  var KEY = 'building-cost-split:v2-ar';
+  var KEY = 'building-cost-split:v4-ar';
   var N_UNITS = 13;
   var SAMPLE_AREAS = ['96.50', '96.50', '118.00', '118.00', '142.75', '96.50', '96.50', '118.00', '118.00', '142.75', '105.25', '105.25', '168.40'];
+  var TABS = ['result', 'expenses', 'areas'];
 
   function $(s, r) { return (r || document).querySelector(s); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function L(s) { return '<span class="ltr">' + esc(s) + '</span>'; }
+  function trimZeros(s) { return s.indexOf('.') >= 0 ? s.replace(/0+$/, '').replace(/\.$/, '') : s; }
+  function fmtArea(v) { return trimZeros(fmtScaled(v, 2)); }
+  function fmtQty(q) { return trimZeros(fmtScaled(parseScaled(q, 3), 3)); }
   function unitLabel(u, i) { return u.name || 'شقة ' + (i + 1); }
+  function sumBig(arr) { return arr.reduce(function (a, b) { return a + b; }, 0n); }
+  function monthly(h) { return (h + 6n) / 12n; }
 
   function sampleState() {
     return {
-      sampleAreas: true,
+      sampleAreas: true, view: 'year',
       units: SAMPLE_AREAS.map(function (a, i) { return { name: 'شقة ' + (i + 1), area: a }; }),
-      expenses: [{ id: 1, name: 'صيانة المصاعد', mode: 'qty', qty: '2', unit: '2750', lump: '', per: 'year', note: 'عقد الصيانة السنوي لتشغيل وصيانة المصعدين' }],
-      sel: 1
+      expenses: []
     };
   }
-  function load() {
+  function parseState(raw) {
     try {
-      var raw = localStorage.getItem(KEY);
-      if (!raw) return null;
       var s = JSON.parse(raw);
       if (!s || !Array.isArray(s.units) || s.units.length !== N_UNITS || !Array.isArray(s.expenses)) return null;
       return {
-        sampleAreas: !!s.sampleAreas,
+        sampleAreas: !!s.sampleAreas, view: s.view === 'month' ? 'month' : 'year',
         units: s.units.map(function (u, i) { return { name: String(u.name == null ? 'شقة ' + (i + 1) : u.name), area: String(u.area == null ? '' : u.area) }; }),
         expenses: s.expenses.map(function (e, i) {
           return {
             id: Number(e.id) || i + 1, name: String(e.name || ''), mode: e.mode === 'lump' ? 'lump' : 'qty',
             qty: String(e.qty == null ? '' : e.qty), unit: String(e.unit == null ? '' : e.unit), lump: String(e.lump == null ? '' : e.lump),
-            per: e.per === 'month' ? 'month' : 'year', note: String(e.note || '')
+            per: e.per === 'month' ? 'month' : 'year'
           };
-        }),
-        sel: Number(s.sel) || null
+        })
       };
+    } catch (err) { return null; }
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      return raw ? parseState(raw) : null;
     } catch (err) { return null; }
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (err) { /* التخزين غير متاح */ } }
 
   var state = load() || sampleState();
-  var lastC = null;
+  var tab = 'result';
   var removed = null;
-  var statusTimer = null;
+  var toastTimer = null;
+  var openUnits = {};
 
   function nextId() { return state.expenses.reduce(function (m, e) { return Math.max(m, e.id); }, 0) + 1; }
   function expName(e) { return e.name.trim() || 'مصروف بلا اسم'; }
   function markValidity(input) { input.setAttribute('aria-invalid', isValidNum(input.value) ? 'false' : 'true'); }
 
-  /* ---------- شريط الحالة ---------- */
+  /* ---------- رسالة قصيرة ---------- */
   function say(text, undo) {
-    var box = $('#status');
+    var box = $('#toast');
     box.textContent = text;
     if (undo) {
       var b = document.createElement('button');
@@ -346,180 +380,204 @@ function exact4(num, sum) {
       b.addEventListener('click', undo);
       box.appendChild(b);
     }
-    clearTimeout(statusTimer);
-    statusTimer = setTimeout(function () { box.textContent = ''; }, 7000);
+    box.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { box.hidden = true; }, 8000);
   }
 
   /* ---------- الحساب ---------- */
   function compute() {
     var areas = state.units.map(function (u) { return parseScaled(u.area, 2); });
-    var sumArea = areas.reduce(function (a, b) { return a + b; }, 0n);
+    var sumArea = sumBig(areas);
+    var offset = 0;
     var exps = state.expenses.map(function (e) {
       var total = annualHalalas(e);
-      var a = allocate(total, areas);
-      return { e: e, total: total, shares: a.shares, nums: a.nums };
+      var a = allocate(total, areas, offset);
+      offset = (offset + a.used) % areas.length;
+      return { e: e, total: total, shares: a.shares };
     });
     var unitTotals = areas.map(function (_, i) { return exps.reduce(function (s, x) { return s + x.shares[i]; }, 0n); });
     var grand = exps.reduce(function (s, x) { return s + x.total; }, 0n);
     return { areas: areas, sumArea: sumArea, exps: exps, unitTotals: unitTotals, grand: grand };
   }
-  function monthly(h) { return (h + 6n) / 12n; }
-  function sumBig(arr) { return arr.reduce(function (a, b) { return a + b; }, 0n); }
 
-  /* ---------- بنود المصروفات ---------- */
+  /* ---------- التبويبات ---------- */
+  function showTab(name) {
+    tab = name;
+    TABS.forEach(function (t) {
+      $('#tab-' + t).setAttribute('aria-selected', t === name ? 'true' : 'false');
+      $('#panel-' + t).hidden = t !== name;
+    });
+    if (name === 'result') renderResult();
+    try { window.scrollTo(0, 0); } catch (e) { /* ignore */ }
+  }
+
+  /* ---------- النتيجة ---------- */
+  function renderResult(c) {
+    c = c || compute();
+    var hero = $('#hero'), body = $('#result-body');
+    if (!state.expenses.length || c.grand === 0n) {
+      hero.innerHTML = '<div class="hero-k">لا توجد مصروفات بعد</div><p class="hero-s">أضف مصروفات المبنى أولاً، وسنحسب لك ما تدفعه كل شقة.</p><button class="btn light" type="button" data-go="expenses">إضافة المصروفات</button>';
+      body.hidden = true;
+      return;
+    }
+    body.hidden = false;
+    hero.innerHTML = '<div class="hero-k">مصروفات المبنى في السنة</div>' +
+      '<div class="hero-v">' + L(fmtScaled(c.grand)) + '<small>ريال</small></div>' +
+      '<p class="hero-s">أي حوالي ' + L(fmtScaled(monthly(c.grand))) + ' ريال في الشهر. تُقسَّم على ' + N_UNITS + ' شقة بحسب المساحة، فكلما كبرت الشقة زاد ما تدفعه.</p>';
+
+    var hasArea = c.sumArea > 0n;
+    var units = $('#units'), totalbar = $('#totalbar'), check = $('#check');
+    $('#view-seg').hidden = !hasArea;
+    if (!hasArea) { units.innerHTML = ''; totalbar.hidden = true; check.hidden = true; return; }
+    totalbar.hidden = false; check.hidden = false;
+
+    var month = state.view === 'month';
+    var maxArea = c.areas.reduce(function (a, b) { return b > a ? b : a; }, 0n);
+    var shown = c.unitTotals.map(function (h) { return month ? monthly(h) : h; });
+    units.innerHTML = state.units.map(function (u, i) {
+      var pct = Number(c.areas[i]) / Number(c.sumArea) * 100;
+      var bar = Math.max(3, Number(c.areas[i]) / Number(maxArea) * 100);
+      var lines = c.exps.map(function (x) {
+        return '<li><span>' + esc(expName(x.e)) + '</span><span><b>' + L(fmtScaled(x.shares[i])) + '</b> ريال</span></li>';
+      }).join('');
+      return '<details class="unit" data-i="' + i + '"' + (openUnits[i] ? ' open' : '') + '>' +
+        '<summary><div><span class="u-name">' + esc(unitLabel(u, i)) + '</span><span class="u-area">المساحة: ' + L(fmtArea(c.areas[i])) + ' متر مربع</span></div>' +
+        '<span class="u-amt">' + L(fmtScaled(shown[i])) + '<small>ريال</small></span><span class="chev" aria-hidden="true"></span>' +
+        '<span class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></span></summary>' +
+        '<div class="u-detail"><p>مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في المبنى، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.</p>' +
+        '<ul class="lines">' + lines +
+        '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(c.unitTotals[i])) + ' ريال</span></li>' +
+        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(monthly(c.unitTotals[i]))) + ' ريال</span></li></ul></div></details>';
+    }).join('');
+
+    var total = sumBig(shown);
+    totalbar.innerHTML = '<span>المجموع ' + (month ? 'في الشهر' : 'في السنة') + '</span><span>' + L(fmtScaled(total)) + ' ريال</span>';
+    if (month) {
+      check.className = 'check muted';
+      check.textContent = 'المبلغ الشهري هو المبلغ السنوي ÷ 12، مقرَّباً لأقرب هللة.';
+    } else if (total === c.grand) {
+      check.className = 'check ok';
+      check.textContent = '✓ مجموع ما تدفعه الشقق يساوي مصروفات المبنى تماماً.';
+    } else {
+      check.className = 'check';
+      check.style.color = 'var(--bad)';
+      check.textContent = 'تنبيه: المجموع لا يطابق مصروفات المبنى. راجع الأرقام المدخلة.';
+    }
+  }
+
+  /* ---------- المصروفات ---------- */
   function numInput(id, k, v) { return '<input id="' + id + '" data-k="' + k + '" class="n" type="text" inputmode="decimal" autocomplete="off" value="' + esc(v) + '">'; }
-  function expRow(e) {
-    var p = 'exp-' + e.id + '-';
+  function seg(name, legend, key, value, options) {
+    return '<fieldset><legend class="lab">' + legend + '</legend><div class="seg">' +
+      options.map(function (o) {
+        return '<label><input type="radio" name="' + name + '" id="' + name + '-' + o[0] + '" data-k="' + key + '" value="' + o[0] + '"' + (value === o[0] ? ' checked' : '') + '><span>' + o[1] + '</span></label>';
+      }).join('') + '</div></fieldset>';
+  }
+  function expCard(e) {
+    var p = 'exp-' + e.id;
     var amount = e.mode === 'lump'
-      ? '<label class="f f-lump" for="' + p + 'lump"><span>المبلغ (ر.س)</span>' + numInput(p + 'lump', 'lump', e.lump) + '</label>'
-      : '<label class="f f-qty" for="' + p + 'qty"><span>العدد</span>' + numInput(p + 'qty', 'qty', e.qty) + '</label>' +
-        '<label class="f f-unit" for="' + p + 'unit"><span>سعر الوحدة (ر.س)</span>' + numInput(p + 'unit', 'unit', e.unit) + '</label>';
-    return '<div class="exp" data-id="' + e.id + '">' +
-      '<label class="f f-name" for="' + p + 'name"><span>المصروف</span><input id="' + p + 'name" data-k="name" type="text" value="' + esc(e.name) + '" placeholder="مثال: النظافة، المياه، الحراسة"></label>' +
-      '<label class="f f-mode" for="' + p + 'mode"><span>طريقة الحساب</span><select id="' + p + 'mode" data-k="mode"><option value="qty"' + (e.mode === 'qty' ? ' selected' : '') + '>العدد × سعر الوحدة</option><option value="lump"' + (e.mode === 'lump' ? ' selected' : '') + '>مبلغ إجمالي</option></select></label>' +
+      ? '<label class="field" for="' + p + '-lump"><span class="lab">المبلغ (بالريال)</span>' + numInput(p + '-lump', 'lump', e.lump) + '</label>'
+      : '<div class="pair"><label class="field" for="' + p + '-qty"><span class="lab">العدد</span>' + numInput(p + '-qty', 'qty', e.qty) + '</label>' +
+        '<label class="field" for="' + p + '-unit"><span class="lab">سعر الواحد (ريال)</span>' + numInput(p + '-unit', 'unit', e.unit) + '</label></div>';
+    return '<section class="card exp" data-id="' + e.id + '">' +
+      '<label class="field" for="' + p + '-name"><span class="lab">اسم المصروف</span><input id="' + p + '-name" data-k="name" type="text" value="' + esc(e.name) + '" placeholder="مثال: النظافة"></label>' +
+      seg('m-' + e.id, 'كيف تُحسب التكلفة؟', 'mode', e.mode, [['qty', 'العدد × سعر الواحد'], ['lump', 'مبلغ واحد']]) +
       amount +
-      '<label class="f f-per" for="' + p + 'per"><span>يُدفع</span><select id="' + p + 'per" data-k="per"><option value="year"' + (e.per === 'year' ? ' selected' : '') + '>كل سنة</option><option value="month"' + (e.per === 'month' ? ' selected' : '') + '>كل شهر</option></select></label>' +
-      '<div class="f f-out"><span>الإجمالي السنوي (ر.س)</span><output data-o="annual">0.00</output><small data-o="rate"></small></div>' +
-      '<button class="del" type="button" data-del aria-label="حذف ' + esc(expName(e)) + '">×</button>' +
-      '<label class="f f-note" for="' + p + 'note"><span>ملاحظة (اختياري)</span><input id="' + p + 'note" data-k="note" type="text" value="' + esc(e.note) + '"></label>' +
-      '</div>';
+      seg('p-' + e.id, 'كل كم يُدفع؟', 'per', e.per, [['year', 'كل سنة'], ['month', 'كل شهر']]) +
+      '<div class="result-line"><span class="muted">الإجمالي في السنة</span><b data-o="annual">0.00</b><span class="how-line" data-o="how"></span></div>' +
+      '<button class="btn danger small" type="button" data-del aria-label="حذف ' + esc(expName(e)) + '">حذف هذا المصروف</button>' +
+      '</section>';
   }
   function renderExpenses() {
     var box = $('#expenses');
-    box.innerHTML = state.expenses.length
-      ? state.expenses.map(expRow).join('')
-      : '<p class="empty">لا توجد مصروفات بعد. أضف أول مصروف لترى كيف يُوزَّع على الشقق.</p>';
+    box.innerHTML = state.expenses.length ? state.expenses.map(expCard).join('') : '<p class="empty">لا توجد مصروفات بعد. اضغط الزر أدناه لإضافة أول مصروف.</p>';
     Array.prototype.forEach.call(box.querySelectorAll('input.n'), markValidity);
   }
-
-  /* ---------- جدول الشقق ---------- */
-  function buildMatrix() {
-    var ex = state.expenses;
-    var head1 = '<tr><th scope="col">الشقة</th><th scope="col">المساحة (م²)</th><th scope="col">النسبة</th>' +
-      ex.map(function (e) { return '<th scope="col" class="exp-h" data-hn="' + e.id + '"></th>'; }).join('') +
-      '<th scope="col">الإجمالي السنوي</th><th scope="col">شهرياً</th></tr>';
-    var head2 = '<tr class="target"><th scope="row" colspan="3">المبلغ المراد توزيعه</th>' +
-      ex.map(function (e) { return '<td class="num" data-tg="' + e.id + '"></td>'; }).join('') +
-      '<td class="num" data-tg-all></td><td class="num" data-tg-m></td></tr>';
-    var rows = state.units.map(function (u, i) {
-      return '<tr data-r="' + i + '">' +
-        '<th scope="row"><input class="in-name" type="text" id="u-' + i + '-name" data-u="' + i + '" data-k="name" value="' + esc(u.name) + '" aria-label="اسم الشقة رقم ' + (i + 1) + '"></th>' +
-        '<td class="num"><input class="in-area n" type="text" inputmode="decimal" autocomplete="off" id="u-' + i + '-area" data-u="' + i + '" data-k="area" value="' + esc(u.area) + '" aria-label="مساحة الشقة رقم ' + (i + 1) + ' بالمتر المربع"></td>' +
-        '<td class="num share"><span data-sh></span><i class="bar" data-bar></i></td>' +
-        ex.map(function (e) { return '<td class="num" data-c="' + e.id + '"></td>'; }).join('') +
-        '<td class="num strong" data-ut></td><td class="num" data-um></td></tr>';
-    }).join('');
-    var foot1 = '<tr><th scope="row">الإجمالي</th><td class="num" data-fa></td><td class="num" data-fs></td>' +
-      ex.map(function (e) { return '<td class="num" data-f="' + e.id + '"></td>'; }).join('') +
-      '<td class="num" data-fu></td><td class="num" data-fm></td></tr>';
-    var foot2 = '<tr class="check"><th scope="row">هل المجموع مطابق؟</th><td></td><td></td>' +
-      ex.map(function (e) { return '<td class="txt" data-k2="' + e.id + '"></td>'; }).join('') +
-      '<td class="txt" data-k2-all></td><td></td></tr>';
-    $('#matrix').innerHTML = '<thead>' + head1 + head2 + '</thead><tbody>' + rows + '</tbody><tfoot>' + foot1 + foot2 + '</tfoot>';
-    Array.prototype.forEach.call($('#matrix').querySelectorAll('input.n'), markValidity);
+  function howText(e) {
+    var per = periodHalalas(e);
+    if (e.mode === 'qty') {
+      var base = L(fmtQty(e.qty) + ' × ' + fmtScaled(parseScaled(e.unit, 2))) + ' = ' + L(fmtScaled(per)) + ' ريال';
+      return e.per === 'month' ? 'كل شهر: ' + base + '، ثم × 12 شهراً' : 'الحساب: ' + base;
+    }
+    return e.per === 'month' ? 'المبلغ الشهري ' + L(fmtScaled(per)) + ' ريال × 12 شهراً' : '';
   }
-
-  function checkCell(td, total, sumShares, hasArea) {
-    if (total === 0n) { td.textContent = '–'; td.className = 'txt'; return; }
-    if (!hasArea) { td.textContent = 'أدخل المساحات'; td.className = 'txt bad'; return; }
-    if (total === sumShares) { td.textContent = '✓ مطابق'; td.className = 'txt ok'; }
-    else { td.textContent = 'غير مطابق ' + fmtScaled(sumShares - total); td.className = 'txt bad'; }
-  }
-
-  function fillMatrix(c) {
-    var m = $('#matrix');
-    var hasArea = c.sumArea > 0n;
+  function updateExpenseCards(c) {
     c.exps.forEach(function (x) {
-      var h = m.querySelector('[data-hn="' + x.e.id + '"]'); if (h) h.textContent = expName(x.e);
-      var t = m.querySelector('[data-tg="' + x.e.id + '"]'); if (t) t.textContent = fmtScaled(x.total);
-      var f = m.querySelector('[data-f="' + x.e.id + '"]'); if (f) f.textContent = fmtScaled(sumBig(x.shares));
-      var k = m.querySelector('[data-k2="' + x.e.id + '"]'); if (k) checkCell(k, x.total, sumBig(x.shares), hasArea);
+      var card = $('.exp[data-id="' + x.e.id + '"]'); if (!card) return;
+      card.querySelector('[data-o="annual"]').innerHTML = L(fmtScaled(x.total)) + '<small>ريال</small>';
+      card.querySelector('[data-o="how"]').innerHTML = howText(x.e);
     });
-    m.querySelector('[data-tg-all]').textContent = fmtScaled(c.grand);
-    m.querySelector('[data-tg-m]').textContent = fmtScaled(monthly(c.grand));
-    var maxArea = c.areas.reduce(function (a, b) { return b > a ? b : a; }, 0n);
-    var monthSum = 0n;
-    Array.prototype.forEach.call(m.tBodies[0].rows, function (row, i) {
-      var pct = hasArea ? (Number(c.areas[i]) / Number(c.sumArea) * 100) : 0;
-      row.querySelector('[data-sh]').textContent = pct.toFixed(2) + '%';
-      row.querySelector('[data-bar]').style.width = (maxArea > 0n ? Math.max(2, Number(c.areas[i]) / Number(maxArea) * 100) : 0) + '%';
-      c.exps.forEach(function (x) {
-        var td = row.querySelector('[data-c="' + x.e.id + '"]'); if (td) td.textContent = fmtScaled(x.shares[i]);
-      });
-      row.querySelector('[data-ut]').textContent = fmtScaled(c.unitTotals[i]);
-      var mo = monthly(c.unitTotals[i]); monthSum += mo;
-      row.querySelector('[data-um]').textContent = fmtScaled(mo);
-    });
-    m.querySelector('[data-fa]').textContent = fmtScaled(c.sumArea);
-    m.querySelector('[data-fs]').textContent = hasArea ? '100.00%' : '0.00%';
-    m.querySelector('[data-fu]').textContent = fmtScaled(sumBig(c.unitTotals));
-    m.querySelector('[data-fm]').textContent = fmtScaled(monthSum);
-    checkCell(m.querySelector('[data-k2-all]'), c.grand, sumBig(c.unitTotals), hasArea);
   }
 
-  /* ---------- تفاصيل الحساب ---------- */
-  function syncSelect() {
-    var sel = $('#bd-exp');
-    if (!state.expenses.some(function (e) { return e.id === state.sel; })) state.sel = state.expenses.length ? state.expenses[0].id : null;
-    sel.innerHTML = state.expenses.map(function (e) { return '<option value="' + e.id + '"' + (e.id === state.sel ? ' selected' : '') + '>' + esc(expName(e)) + '</option>'; }).join('');
-    sel.disabled = !state.expenses.length;
-  }
-  function fillWorkings(c) {
-    var f = $('#bd-formula'), t = $('#bd-table');
-    var x = c.exps.filter(function (q) { return q.e.id === state.sel; })[0];
-    if (!x) { f.textContent = 'أضف مصروفاً لترى طريقة حسابه.'; t.innerHTML = ''; return; }
-    var hasArea = c.sumArea > 0n;
-    f.innerHTML = 'حصة الشقة = ' + L(fmtScaled(x.total)) + ' ر.س × مساحة الشقة ÷ ' + L(fmtScaled(c.sumArea)) + ' م²';
-    var rows = state.units.map(function (u, i) {
-      var ratio = hasArea ? (Number(c.areas[i]) / Number(c.sumArea) * 100).toFixed(4) + '%' : '–';
-      var ex4 = exact4(x.nums[i], c.sumArea);
-      var diff = x.shares[i] * 100n - ex4;
-      return '<tr><th scope="row">' + esc(unitLabel(u, i)) + '</th><td class="num">' + fmtScaled(c.areas[i]) + '</td><td class="num">' + ratio + '</td><td class="num">' + fmtScaled(ex4, 4) + '</td><td class="num strong">' + fmtScaled(x.shares[i]) + '</td><td class="num muted">' + (diff > 0n ? '+' : '') + fmtScaled(diff, 4) + '</td></tr>';
+  /* ---------- المساحات ---------- */
+  function renderAreas() {
+    var rows = '<div class="ahead"><span>الشقة</span><span>المساحة</span></div>' + state.units.map(function (u, i) {
+      return '<div class="arow">' +
+        '<input class="a-name" type="text" id="u-' + i + '-name" data-u="' + i + '" data-k="name" value="' + esc(u.name) + '" aria-label="اسم الشقة رقم ' + (i + 1) + '">' +
+        '<div class="a-field"><input class="n a-area" type="text" inputmode="decimal" autocomplete="off" id="u-' + i + '-area" data-u="' + i + '" data-k="area" value="' + esc(u.area) + '" aria-label="مساحة الشقة رقم ' + (i + 1) + ' بالمتر المربع"><span>متر مربع</span></div></div>';
     }).join('');
-    var paid = sumBig(x.shares);
-    t.innerHTML = '<thead><tr><th scope="col">الشقة</th><th scope="col">المساحة (م²)</th><th scope="col">المساحة ÷ إجمالي المساحة</th><th scope="col">الحصة الدقيقة (ر.س)</th><th scope="col">المبلغ المستحق (ر.س)</th><th scope="col">فرق التقريب</th></tr></thead><tbody>' + rows +
-      '</tbody><tfoot><tr><th scope="row">الإجمالي</th><td class="num">' + fmtScaled(c.sumArea) + '</td><td class="num">' + (hasArea ? '100.0000%' : '–') + '</td><td class="num">' + fmtScaled(x.total * 100n, 4) + '</td><td class="num">' + fmtScaled(paid) + '</td><td class="num">' + fmtScaled((paid - (hasArea ? x.total : paid)) * 100n, 4) + '</td></tr></tfoot>';
+    $('#areas').innerHTML = rows;
+    Array.prototype.forEach.call($('#areas').querySelectorAll('input.n'), markValidity);
   }
 
-  /* ---------- كل ما يعتمد على الأرقام ---------- */
+  function refreshNotices(c) {
+    var nr = $('#notice-result'), na = $('#notice-areas');
+    if (c.sumArea === 0n) {
+      nr.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل ليتم توزيع المصروفات.</p><button class="btn small" type="button" data-go="areas">اكتب المساحات</button>';
+      nr.hidden = false;
+      na.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل.</p>'; na.hidden = false;
+    } else if (state.sampleAreas) {
+      nr.innerHTML = '<p>مساحات الشقق الآن أرقام تجريبية، وليست المساحات الحقيقية.</p><button class="btn small" type="button" data-go="areas">اكتب المساحات الحقيقية</button>';
+      nr.hidden = false;
+      na.innerHTML = '<p>هذه مساحات تجريبية. اكتب المساحة الحقيقية لكل شقة.</p>'; na.hidden = false;
+    } else { nr.hidden = true; na.hidden = true; }
+    $('#area-total').innerHTML = 'إجمالي المساحة: ' + L(fmtArea(c.sumArea)) + ' متر مربع';
+  }
+
   function update() {
     var c = compute();
-    lastC = c;
-    $('#s-annual').textContent = fmtScaled(c.grand);
-    $('#s-month').textContent = fmtScaled(monthly(c.grand));
-    $('#s-area').textContent = fmtScaled(c.sumArea);
-    $('#s-rate').textContent = c.sumArea > 0n ? (Number(c.grand) / Number(c.sumArea)).toFixed(2) : '0.00';
-    c.exps.forEach(function (x) {
-      var row = $('.exp[data-id="' + x.e.id + '"]'); if (!row) return;
-      row.querySelector('[data-o="annual"]').textContent = fmtScaled(x.total);
-      row.querySelector('[data-o="rate"]').innerHTML = c.sumArea > 0n ? L((Number(x.total) / Number(c.sumArea)).toFixed(2)) + ' ر.س لكل م²' : '';
-    });
-    var notice = $('#notice');
-    if (c.sumArea === 0n) { notice.hidden = false; notice.textContent = 'أدخل مساحة أكبر من صفر لشقة واحدة على الأقل لتوزيع التكاليف.'; }
-    else if (state.sampleAreas) { notice.hidden = false; notice.textContent = 'مساحات الشقق قيم تجريبية. استبدلها بالمساحة الفعلية لكل شقة في الجدول أدناه.'; }
-    else { notice.hidden = true; }
-    fillMatrix(c);
-    fillWorkings(c);
+    refreshNotices(c);
+    updateExpenseCards(c);
+    if (tab === 'result') renderResult(c);
     persist();
   }
-  function rebuildAll() { renderExpenses(); buildMatrix(); syncSelect(); update(); }
+  function rebuildAll() {
+    $('#view-seg').querySelector('input[value="' + state.view + '"]').checked = true;
+    renderExpenses(); renderAreas(); update();
+  }
 
   /* ---------- الأحداث ---------- */
-  $('#expenses').addEventListener('input', function (ev) {
-    var t = ev.target, row = t.closest('.exp'); if (!row || !t.dataset.k) return;
-    var e = state.expenses.filter(function (q) { return String(q.id) === row.dataset.id; })[0]; if (!e) return;
+  document.addEventListener('click', function (ev) {
+    var g = ev.target.closest('[data-go]'); if (g) showTab(g.dataset.go);
+  });
+  TABS.forEach(function (t) { $('#tab-' + t).addEventListener('click', function () { showTab(t); }); });
+  $('#units').addEventListener('toggle', function (ev) {
+    var d = ev.target; if (d && d.dataset && d.dataset.i !== undefined) openUnits[d.dataset.i] = d.open;
+  }, true);
+  $('#view-seg').addEventListener('change', function (ev) {
+    if (ev.target.name !== 'view') return;
+    state.view = ev.target.value; update();
+  });
+
+  function onExpenseEvent(ev) {
+    var t = ev.target, card = t.closest ? t.closest('.exp') : null; if (!card || !t.dataset.k) return;
+    var isRadio = t.type === 'radio';
+    if ((isRadio && ev.type !== 'change') || (!isRadio && ev.type !== 'input')) return;
+    var e = state.expenses.filter(function (q) { return String(q.id) === card.dataset.id; })[0]; if (!e) return;
     e[t.dataset.k] = t.value;
     if (t.classList.contains('n')) markValidity(t);
-    if (t.dataset.k === 'mode') {
+    if (t.dataset.k === 'mode' || t.dataset.k === 'per') {
       renderExpenses();
-      var again = document.getElementById('exp-' + e.id + '-mode'); if (again) again.focus();
+      var again = document.getElementById((t.dataset.k === 'mode' ? 'm-' : 'p-') + e.id + '-' + t.value); if (again) again.focus();
     }
     if (t.dataset.k === 'name') {
-      var opt = $('#bd-exp option[value="' + e.id + '"]'); if (opt) opt.textContent = expName(e);
-      var del = row.querySelector('[data-del]'); if (del) del.setAttribute('aria-label', 'حذف ' + expName(e));
+      var del = card.querySelector('[data-del]'); if (del) del.setAttribute('aria-label', 'حذف ' + expName(e));
     }
     update();
-  });
+  }
+  $('#expenses').addEventListener('input', onExpenseEvent);
+  $('#expenses').addEventListener('change', onExpenseEvent);
   $('#expenses').addEventListener('click', function (ev) {
     var b = ev.target.closest('[data-del]'); if (!b) return;
     var id = Number(b.closest('.exp').dataset.id);
@@ -527,21 +585,20 @@ function exact4(num, sum) {
     if (idx < 0) return;
     removed = { e: state.expenses[idx], idx: idx };
     state.expenses.splice(idx, 1);
-    rebuildAll();
-    say('تم حذف «' + expName(removed.e) + '». ', function () {
+    renderExpenses(); update();
+    say('تم حذف «' + expName(removed.e) + '».', function () {
       if (!removed) return;
-      state.expenses.splice(removed.idx, 0, removed.e); state.sel = removed.e.id; removed = null;
-      rebuildAll(); say('تمت استعادة المصروف.');
+      state.expenses.splice(removed.idx, 0, removed.e); removed = null;
+      renderExpenses(); update(); say('تمت استعادة المصروف.');
     });
   });
   $('#btn-add').addEventListener('click', function () {
     var id = nextId();
-    state.expenses.push({ id: id, name: '', mode: 'qty', qty: '1', unit: '', lump: '', per: 'year', note: '' });
-    state.sel = id;
-    rebuildAll();
+    state.expenses.push({ id: id, name: '', mode: 'lump', qty: '1', unit: '', lump: '', per: 'year' });
+    renderExpenses(); update();
     var inp = document.getElementById('exp-' + id + '-name'); if (inp) inp.focus();
   });
-  $('#matrix').addEventListener('input', function (ev) {
+  $('#areas').addEventListener('input', function (ev) {
     var t = ev.target; if (t.dataset.u === undefined) return;
     var u = state.units[Number(t.dataset.u)]; if (!u) return;
     u[t.dataset.k] = t.value;
@@ -549,9 +606,8 @@ function exact4(num, sum) {
     if (t.dataset.k === 'area') state.sampleAreas = false;
     update();
   });
-  $('#bd-exp').addEventListener('change', function (ev) { state.sel = Number(ev.target.value); update(); });
 
-  var RESET_LABEL = 'العودة للبيانات التجريبية';
+  var RESET_LABEL = 'البدء من جديد (يمسح كل البيانات)';
   var armTimer = null;
   $('#btn-reset').addEventListener('click', function () {
     var b = this;
@@ -562,13 +618,26 @@ function exact4(num, sum) {
     }
     clearTimeout(armTimer);
     b.classList.remove('armed'); b.textContent = RESET_LABEL;
-    state = sampleState(); rebuildAll(); say('تمت استعادة البيانات التجريبية.');
+    state = sampleState(); openUnits = {}; rebuildAll(); say('تم مسح البيانات والبدء من جديد.');
   });
 
-  /* ---------- التصدير ---------- */
+  /* ---------- المشاركة ---------- */
+  function summaryText() {
+    var c = compute(), lines = [];
+    lines.push('توزيع تكاليف المبنى');
+    if (c.exps.length) lines.push('المصروفات: ' + c.exps.map(function (x) { return expName(x.e); }).join('، '));
+    lines.push('الإجمالي: ' + fmtScaled(c.grand) + ' ريال في السنة (حوالي ' + fmtScaled(monthly(c.grand)) + ' في الشهر)');
+    lines.push('');
+    state.units.forEach(function (u, i) {
+      lines.push(unitLabel(u, i) + ' (' + fmtArea(c.areas[i]) + ' م²): ' + fmtScaled(c.unitTotals[i]) + ' ريال في السنة، ' + fmtScaled(monthly(c.unitTotals[i])) + ' في الشهر');
+    });
+    lines.push('');
+    lines.push('المجموع: ' + fmtScaled(sumBig(c.unitTotals)) + ' ريال في السنة');
+    return lines.join('\n');
+  }
   function tableRows() {
-    var c = lastC || compute();
-    var head = ['الشقة', 'المساحة (م2)', 'النسبة (%)'].concat(c.exps.map(function (x) { return expName(x.e) + ' (ر.س/سنة)'; }), ['الإجمالي السنوي (ر.س)', 'شهرياً (ر.س)']);
+    var c = compute();
+    var head = ['الشقة', 'المساحة (م2)', 'النسبة (%)'].concat(c.exps.map(function (x) { return expName(x.e) + ' (ريال/سنة)'; }), ['الإجمالي السنوي (ريال)', 'شهرياً (ريال)']);
     var hasArea = c.sumArea > 0n;
     var rows = state.units.map(function (u, i) {
       var pct = hasArea ? (Number(c.areas[i]) / Number(c.sumArea) * 100).toFixed(2) : '0.00';
@@ -579,6 +648,21 @@ function exact4(num, sum) {
     return [head].concat(rows);
   }
   function csvCell(v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+  function copyText(text, okMsg) {
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      say(ok ? okMsg : 'تعذّر النسخ في هذا العرض.');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { say(okMsg); }, fallback);
+    } else { fallback(); }
+  }
+  $('#btn-text').addEventListener('click', function () { copyText(summaryText(), 'تم نسخ النتيجة. الصقها في واتساب.'); });
+  $('#btn-copy').addEventListener('click', function () { copyText(tableRows().map(function (r) { return r.join('\t'); }).join('\n'), 'تم نسخ الجدول. الصقه في Excel أو Google Sheets.'); });
 
   var downloads = null;
   try {
@@ -586,31 +670,17 @@ function exact4(num, sum) {
       window.claude.use('downloads').then(function (d) { downloads = d; $('#btn-csv').hidden = !d; }, function () { });
     }
   } catch (err) { /* الصفحة تعمل بدونها */ }
-
   $('#btn-csv').addEventListener('click', function () {
     if (!downloads) return;
     var csv = '﻿' + tableRows().map(function (r) { return r.map(csvCell).join(','); }).join('\r\n') + '\r\n';
     downloads.save({ filename: 'building-cost-split.csv', data: csv }).then(function () { say('تم حفظ ملف CSV.'); }, function (err) {
       if (err && err.code === 'declined') return;
-      say('تعذّر حفظ الملف هنا. استخدم «نسخ الجدول» بدلاً من ذلك.');
+      say('تعذّر حفظ الملف هنا. استخدم زر النسخ بدلاً من ذلك.');
     });
-  });
-  $('#btn-copy').addEventListener('click', function () {
-    var tsv = tableRows().map(function (r) { return r.join('\t'); }).join('\n');
-    function fallback() {
-      var ta = document.createElement('textarea');
-      ta.value = tsv; ta.style.position = 'fixed'; ta.style.opacity = '0';
-      document.body.appendChild(ta); ta.select();
-      var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
-      document.body.removeChild(ta);
-      say(ok ? 'تم نسخ الجدول. الصقه في Excel أو Google Sheets.' : 'تم منع النسخ في هذا العرض. حدّد الجدول وانسخه يدوياً.');
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(tsv).then(function () { say('تم نسخ الجدول. الصقه في Excel أو Google Sheets.'); }, fallback);
-    } else { fallback(); }
   });
 
   rebuildAll();
+  showTab(state.expenses.length ? 'result' : 'expenses');
 })();
 </script>
 </body>
