@@ -315,7 +315,7 @@ function exact4(num, sum) {
 (function () {
   var KEY = 'building-cost-split:v4-ar';
   var N_UNITS = 13;
-  var SAMPLE_AREAS = ['96.50', '96.50', '118.00', '118.00', '142.75', '96.50', '96.50', '118.00', '118.00', '142.75', '105.25', '105.25', '168.40'];
+  var REAL_AREAS = ['167', '167', '167', '167', '167', '167', '250', '250', '250', '250', '250', '250', '400'];
   var TABS = ['result', 'expenses', 'areas'];
 
   function $(s, r) { return (r || document).querySelector(s); }
@@ -330,8 +330,8 @@ function exact4(num, sum) {
 
   function sampleState() {
     return {
-      sampleAreas: true, view: 'year',
-      units: SAMPLE_AREAS.map(function (a, i) { return { name: 'شقة ' + (i + 1), area: a }; }),
+      sampleAreas: false, view: 'year',
+      units: REAL_AREAS.map(function (a, i) { return { name: 'شقة ' + (i + 1), area: a }; }),
       expenses: []
     };
   }
@@ -340,8 +340,8 @@ function exact4(num, sum) {
       var s = JSON.parse(raw);
       if (!s || !Array.isArray(s.units) || s.units.length !== N_UNITS || !Array.isArray(s.expenses)) return null;
       return {
-        sampleAreas: !!s.sampleAreas, view: s.view === 'month' ? 'month' : 'year',
-        units: s.units.map(function (u, i) { return { name: String(u.name == null ? 'شقة ' + (i + 1) : u.name), area: String(u.area == null ? '' : u.area) }; }),
+        sampleAreas: false, view: s.view === 'month' ? 'month' : 'year',
+        units: s.units.map(function (u, i) { return { name: String(u.name == null ? 'شقة ' + (i + 1) : u.name), area: s.sampleAreas ? REAL_AREAS[i] : String(u.area == null ? '' : u.area) }; }),
         expenses: s.expenses.map(function (e, i) {
           return {
             id: Number(e.id) || i + 1, name: String(e.name || ''), mode: e.mode === 'lump' ? 'lump' : 'qty',
