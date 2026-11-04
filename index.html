@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="يوزّع مصروفات عمارة النهضة المباركة على 14 شقة بحسب المساحة، مع تقريب دقيق وشرح خطوات الحساب.">
-<title>تكاليف عمارة النهضة المباركة إن شاء الله</title>
+<title>مصاريف عمارة النهضة المباركة إن شاء الله</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap">
 <style>
@@ -200,9 +200,9 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 <body>
 <div class="wrap" dir="rtl" lang="ar">
   <header class="masthead">
-    <h1 class="title"><span class="t-a">تكاليف عمارة</span><span class="t-b">النهضة المباركة</span><span class="t-c">إن شاء الله</span></h1>
+    <h1 class="title"><span class="t-a">مصاريف عمارة</span><span class="t-b">النهضة المباركة</span><span class="t-c">إن شاء الله</span></h1>
     <div class="orn" aria-hidden="true"><i></i></div>
-    <p class="tag">نصيب كل شقة من مصروفات العمارة بحسب مساحتها</p>
+    <p class="tag">المستحق من كل شقة من مصروفات العمارة بحسب مساحتها</p>
   </header>
 
   <div class="tabbar" id="tabbar">
@@ -656,7 +656,7 @@ function exact4(num, sum) {
   /* ---------- المشاركة ---------- */
   function summaryText() {
     var c = compute(), lines = [];
-    lines.push('تكاليف عمارة النهضة المباركة إن شاء الله');
+    lines.push('مصاريف عمارة النهضة المباركة إن شاء الله');
     if (c.exps.length) lines.push('المصروفات: ' + c.exps.map(function (x) { return expName(x.e); }).join('، '));
     lines.push('الإجمالي: ' + fmtScaled(c.grand) + ' ريال في السنة (حوالي ' + fmtScaled(monthly(c.grand)) + ' في الشهر)');
     lines.push('');
