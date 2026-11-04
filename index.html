@@ -5,30 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="يوزّع مصروفات المبنى على 13 شقة بحسب المساحة، مع تقريب دقيق وشرح خطوات الحساب.">
-<title>توزيع تكاليف المبنى</title>
+<meta name="description" content="يوزّع مصروفات عمارة النهضة المباركة على 14 شقة بحسب المساحة، مع تقريب دقيق وشرح خطوات الحساب.">
+<title>تكاليف عمارة النهضة المباركة إن شاء الله</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap">
 <style>
-/* التخطيط: عمود واحد بخط كبير. ثلاث تبويبات كبيرة: النتيجة، المصروفات، المساحات. النتيجة تعرض رقماً واحداً لكل شقة، والضغط على الشقة يشرح الحساب بجمل بسيطة. */
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+
+/* التخطيط: عمود واحد بخط كبير. ترويسة زمردية بإطار ذهبي والاسم في المنتصف، ثم ثلاث تبويبات: النتيجة، المصروفات، المساحات. أرضية لؤلؤية فاتحة وبطاقات بيضاء وذهب خفيف للتفاصيل فقط. */
 :root {
   font-size: 112.5%;
-  --bg: #F5F7FA;
+  --bg: #F2EBDC;
   --surface: #FFFFFF;
-  --surface-2: #E9EEF5;
-  --line: #CBD4E1;
-  --ink: #0F1B2A;
-  --ink-2: #3D4C61;
-  --accent: #1A4F9C;
+  --surface-2: #E8EFE9;
+  --line: #D3DCD4;
+  --ink: #11201A;
+  --ink-2: #44534C;
+  --accent: #0B4637;
+  --accent-2: #14634E;
   --accent-ink: #FFFFFF;
-  --accent-soft: #E0EAF8;
-  --bar: #8DB0E6;
-  --good: #14633D;
-  --good-soft: #E3F4EA;
-  --warn: #7A4700;
-  --warn-soft: #FFF3D1;
+  --accent-soft: #E1EEE7;
+  --gold: #B88A32;
+  --gold-light: #E8CB7C;
+  --gold-pale: #F7EDD0;
+  --bar: #C9A24E;
+  --good: #146A44;
+  --good-soft: #E1F3E8;
+  --warn: #6B4A0B;
+  --warn-soft: #FBF1D6;
   --bad: #A61E17;
-  --font-display: 'Noto Kufi Arabic', 'IBM Plex Sans Arabic', Tahoma, system-ui, sans-serif;
+  --shadow: 0 1px 2px rgba(11, 70, 55, .06), 0 10px 28px rgba(11, 70, 55, .07);
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23E8CB7C' stroke-opacity='.12' stroke-width='1'%3E%3Crect x='15' y='15' width='26' height='26'/%3E%3Crect x='15' y='15' width='26' height='26' transform='rotate(45 28 28)'/%3E%3Ccircle cx='28' cy='28' r='4'/%3E%3C/g%3E%3C/svg%3E");
+  --font-display: 'Aref Ruqaa', 'IBM Plex Sans Arabic', 'Noto Naskh Arabic', Tahoma, serif;
   --font-body: 'IBM Plex Sans Arabic', 'Noto Naskh Arabic', Tahoma, system-ui, sans-serif;
   color-scheme: light;
 }
@@ -40,34 +49,49 @@ body {
   font: 1rem/1.85 var(--font-body);
   text-rendering: optimizeLegibility;
   font-kerning: normal;
-  padding-block: 20px 120px;
+  padding-block: 18px 120px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
 .wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
-h1, h2 { font-family: var(--font-display); margin: 0; text-wrap: balance; line-height: 1.5; }
-h1 { font-size: 1.9rem; font-weight: 700; }
-h2 { font-size: 1.3rem; font-weight: 700; }
+h2 { font-family: var(--font-body); font-size: 1.3rem; font-weight: 700; margin: 0; text-wrap: balance; line-height: 1.5; color: var(--accent); }
 p { margin: 0; text-wrap: pretty; }
 button, select, input { font: inherit; color: inherit; }
 .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; font-variant-numeric: tabular-nums; }
 .muted { color: var(--ink-2); }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+
+/* الترويسة: الاسم في المنتصف */
+.masthead { position: relative; text-align: center; color: #fff; border-radius: 24px; padding: 30px 18px 24px; display: grid; justify-items: center; gap: 4px;
+  background-color: #0A3B2F;
+  background-image: var(--pattern), radial-gradient(120% 140% at 50% 0%, #137057 0%, #0B4637 55%, #08342A 100%);
+  box-shadow: var(--shadow); isolation: isolate; }
+.masthead::after { content: ""; position: absolute; inset: 9px; border-radius: 17px; border: 1px solid rgba(232, 203, 124, .45); pointer-events: none; z-index: -1; }
+.title { margin: 0; display: grid; justify-items: center; font-family: var(--font-display); font-weight: 700; line-height: 1.55; }
+.t-a { font-size: clamp(1.25rem, 5.4vw, 1.6rem); font-weight: 400; color: var(--gold-light); }
+.t-b { font-size: clamp(2.1rem, 10.5vw, 3.3rem); color: #FFFDF6; line-height: 1.45; text-wrap: balance; text-shadow: 0 2px 14px rgba(0, 0, 0, .28); }
+.t-c { font-size: clamp(1.25rem, 5.4vw, 1.6rem); font-weight: 400; color: var(--gold-light); }
+.orn { display: flex; align-items: center; justify-content: center; gap: 10px; width: min(260px, 70%); margin-block: 8px 4px; }
+.orn::before, .orn::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, var(--gold-light)); }
+.orn::after { background: linear-gradient(270deg, transparent, var(--gold-light)); }
+.orn i { width: 9px; height: 9px; background: var(--gold-light); transform: rotate(45deg); }
+.tag { color: #D7E6DE; font-size: 1rem; line-height: 1.7; }
 
 /* التبويبات */
 .tabbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 6px 8px; }
-.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 6px; background: var(--surface-2); border-radius: 16px; }
-.tab { appearance: none; cursor: pointer; min-height: 56px; border: 2px solid transparent; border-radius: 12px; background: transparent; color: var(--ink-2); font-weight: 700; font-size: 1.05rem; padding: 4px 6px; line-height: 1.4; }
-.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
-.tab:hover:not([aria-selected="true"]) { border-color: var(--accent); color: var(--accent); }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 6px; background: var(--surface-2); border-radius: 18px; }
+.tab { appearance: none; cursor: pointer; min-height: 56px; border: 2px solid transparent; border-radius: 13px; background: transparent; color: var(--ink-2); font-weight: 700; font-size: 1.05rem; padding: 4px 6px; line-height: 1.4; }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 var(--gold-light), 0 3px 10px rgba(11, 70, 55, .22); }
+.tab:hover:not([aria-selected="true"]) { border-color: var(--accent-2); color: var(--accent); background: rgba(255, 255, 255, .6); }
 
 /* الأزرار */
-.btn { appearance: none; cursor: pointer; min-height: 56px; padding: 8px 20px; border-radius: 12px; border: 2px solid var(--accent); background: var(--surface); color: var(--accent); font-weight: 700; font-size: 1.05rem; line-height: 1.5; }
+.btn { appearance: none; cursor: pointer; min-height: 56px; padding: 8px 20px; border-radius: 14px; border: 2px solid var(--accent); background: var(--surface); color: var(--accent); font-weight: 700; font-size: 1.05rem; line-height: 1.5; }
 .btn:hover { background: var(--accent-soft); }
-.btn.primary { background: var(--accent); color: var(--accent-ink); }
-.btn.primary:hover { filter: brightness(1.1); }
-.btn.light { background: #fff; color: var(--accent); border-color: #fff; }
+.btn.primary { background: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 var(--gold-light), 0 4px 12px rgba(11, 70, 55, .2); }
+.btn.primary:hover { background: var(--accent-2); }
+.btn.light { background: #FFFDF6; color: var(--accent); border-color: var(--gold-light); }
+.btn.light:hover { background: var(--gold-pale); }
 .btn.danger { border-color: var(--bad); color: var(--bad); background: var(--surface); }
 .btn.danger:hover { background: #FBE9E7; }
 .btn.armed { background: var(--bad); color: #fff; border-color: var(--bad); }
@@ -75,16 +99,20 @@ button, select, input { font: inherit; color: inherit; }
 .btn.quiet { border-color: var(--line); color: var(--ink-2); font-weight: 600; }
 .btn.small { min-height: 48px; padding: 6px 16px; }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; min-width: 0; }
-.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 18px; border-radius: 14px; background: var(--warn-soft); color: var(--warn); font-weight: 600; border: 1px solid #E8C879; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px; min-width: 0; box-shadow: var(--shadow); }
+.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 18px; border-radius: 16px; background: var(--warn-soft); color: var(--warn); font-weight: 600; border: 1px solid #E3C77A; }
 .notice p { flex: 1 1 14em; }
 
 /* بطاقة الإجمالي */
-.hero { background: var(--accent); color: var(--accent-ink); border-radius: 18px; padding: 22px; display: grid; gap: 6px; justify-items: start; }
-.hero-k { font-size: 1.1rem; font-weight: 600; opacity: .95; }
-.hero-v { font: 700 2.5rem/1.3 var(--font-body); }
-.hero-v small { font-size: 1.2rem; font-weight: 600; margin-inline-start: 8px; }
-.hero-s { font-size: 1.05rem; }
+.hero { position: relative; color: #fff; border-radius: 22px; padding: 24px 22px; display: grid; gap: 6px; justify-items: start; isolation: isolate; box-shadow: var(--shadow);
+  background-color: #0A3B2F;
+  background-image: var(--pattern), linear-gradient(155deg, #12654F 0%, #0B4637 60%, #08342A 100%); }
+.hero::after { content: ""; position: absolute; inset: 8px; border-radius: 15px; border: 1px solid rgba(232, 203, 124, .38); pointer-events: none; z-index: -1; }
+.hero :focus-visible { outline-color: #fff; }
+.hero-k { font-size: 1.1rem; font-weight: 600; color: var(--gold-light); }
+.hero-v { font: 700 2.6rem/1.3 var(--font-body); color: #FFFDF6; }
+.hero-v small { font-size: 1.2rem; font-weight: 600; margin-inline-start: 8px; color: var(--gold-light); }
+.hero-s { font-size: 1.05rem; color: #E3EEE8; }
 
 /* التبديل بين سنوي وشهري */
 .view-row { display: grid; gap: 6px; }
@@ -93,88 +121,89 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; margin-top: 6px; }
 .seg label { position: relative; display: block; }
 .seg input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.seg span { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 6px 10px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); font-weight: 600; text-align: center; line-height: 1.5; }
-.seg input:hover + span { border-color: var(--accent); }
-.seg input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.seg input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 3px; }
+.seg span { display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 6px 10px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); font-weight: 600; text-align: center; line-height: 1.5; }
+.seg input:hover + span { border-color: var(--accent-2); }
+.seg input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 var(--gold-light); }
+.seg input:focus-visible + span { outline: 3px solid var(--accent-2); outline-offset: 3px; }
 
 /* قائمة الشقق */
 .units { display: grid; gap: 10px; }
-details.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
-details.unit[open] { border-color: var(--accent); }
-details.unit summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 4px 14px; padding: 14px 18px; min-height: 76px; border-radius: 16px; }
+details.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(11, 70, 55, .05); }
+details.unit[open] { border-color: var(--gold); box-shadow: var(--shadow); }
+details.unit summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 4px 14px; padding: 14px 18px; min-height: 76px; border-radius: 18px; }
 details.unit summary::-webkit-details-marker { display: none; }
 details.unit summary:hover { background: var(--accent-soft); }
 .u-name { font-weight: 700; font-size: 1.2rem; line-height: 1.5; }
 .u-area { display: block; font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
-.u-amt { font-weight: 700; font-size: 1.6rem; line-height: 1.3; white-space: nowrap; }
+.u-amt { font-weight: 700; font-size: 1.6rem; line-height: 1.3; white-space: nowrap; color: var(--accent); }
 .u-amt small { font-size: 0.95rem; font-weight: 600; color: var(--ink-2); margin-inline-start: 6px; }
-.chev { width: 12px; height: 12px; border-right: 3px solid var(--ink-2); border-bottom: 3px solid var(--ink-2); transform: rotate(45deg); margin-block: -4px 4px; }
+.chev { width: 12px; height: 12px; border-right: 3px solid var(--gold); border-bottom: 3px solid var(--gold); transform: rotate(45deg); margin-block: -4px 4px; }
 details.unit[open] .chev { transform: rotate(225deg); margin-block: 4px -4px; }
 .u-bar { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-top: 4px; }
-.u-bar i { display: block; height: 100%; background: var(--bar); border-radius: 4px; }
+.u-bar i { display: block; height: 100%; background: linear-gradient(270deg, #DDB964, #B88A32); border-radius: 4px; }
 .u-detail { padding: 4px 18px 18px; display: grid; gap: 10px; }
 .u-detail .lines { list-style: none; margin: 0; padding: 0; }
 .u-detail .lines li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .u-detail .lines li.sum { font-weight: 700; border-bottom: 0; }
-.totalbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--surface-2); border-radius: 14px; font-weight: 700; font-size: 1.25rem; }
+.totalbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 16px; font-weight: 700; font-size: 1.25rem; color: var(--accent); }
 .check { font-weight: 600; }
-.check.ok { color: var(--good); background: var(--good-soft); padding: 10px 16px; border-radius: 12px; }
+.check.ok { color: var(--good); background: var(--good-soft); padding: 10px 16px; border-radius: 14px; }
 
 .method ol { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
 .method li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
-.method li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.method li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gold-pale); border: 1px solid var(--gold-light); color: var(--accent); font-weight: 700; }
 .method .foot { margin-top: 12px; color: var(--ink-2); }
 .share-row { display: grid; gap: 10px; margin-top: 12px; }
 
 /* الحقول */
 .field { display: grid; gap: 4px; min-width: 0; }
-input[type=text] { width: 100%; min-height: 56px; padding: 8px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); font-size: 1.1rem; line-height: 1.5; }
+input[type=text] { width: 100%; min-height: 56px; padding: 8px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); font-size: 1.1rem; line-height: 1.5; }
 input[type=text]:hover { border-color: var(--ink-2); }
-input[type=text]:focus-visible { border-color: var(--accent); outline-offset: 1px; }
+input[type=text]:focus-visible { border-color: var(--accent-2); outline-offset: 1px; }
 input.n { direction: ltr; text-align: right; font-variant-numeric: tabular-nums; }
 input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 
 /* المصروفات */
 .exp { display: grid; gap: 16px; }
 .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.result-line { display: grid; gap: 2px; padding: 14px 16px; background: var(--accent-soft); border-radius: 12px; }
-.result-line b { font-size: 1.5rem; line-height: 1.4; }
+.result-line { display: grid; gap: 2px; padding: 14px 16px; background: var(--accent-soft); border-radius: 14px; }
+.result-line b { font-size: 1.5rem; line-height: 1.4; color: var(--accent); }
 .result-line b small { font-size: 1rem; margin-inline-start: 6px; }
 .how-line { color: var(--ink-2); font-size: 0.95rem; line-height: 1.8; }
 .empty { padding: 8px 2px; color: var(--ink-2); }
 
 /* المساحات */
 .areas { display: grid; gap: 10px; margin-top: 12px; }
-.arow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: center; }
+.arow, .ahead { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 10px; align-items: center; }
 .a-field { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.a-field span { white-space: nowrap; color: var(--ink-2); font-weight: 600; }
-.ahead { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; font-weight: 700; color: var(--ink-2); font-size: 0.95rem; }
-.total-line { margin-top: 14px; padding: 14px 16px; background: var(--surface-2); border-radius: 12px; font-weight: 700; font-size: 1.15rem; }
+.a-field span { white-space: nowrap; color: var(--ink-2); font-weight: 600; font-size: .95rem; }
+.ahead { font-weight: 700; color: var(--ink-2); font-size: 0.95rem; }
+.total-line { margin-top: 14px; padding: 14px 16px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 14px; font-weight: 700; font-size: 1.15rem; color: var(--accent); }
 
 .foot-row { display: flex; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
 
 .toast { position: fixed; inset-inline: 0; bottom: 0; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 18px;
-  padding: 14px max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: #fff; font-weight: 600; }
-.toast button { appearance: none; cursor: pointer; min-height: 44px; padding: 4px 18px; border-radius: 10px; border: 2px solid #fff; background: transparent; color: #fff; font-weight: 700; }
+  padding: 14px max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)); background: var(--accent); color: #fff; font-weight: 600; border-top: 2px solid var(--gold-light); }
+.toast button { appearance: none; cursor: pointer; min-height: 44px; padding: 4px 18px; border-radius: 10px; border: 2px solid var(--gold-light); background: transparent; color: #fff; font-weight: 700; }
 
 @media (max-width: 480px) {
-  h1 { font-size: 1.6rem; }
-  .hero-v { font-size: 2.1rem; }
+  .hero-v { font-size: 2.2rem; }
   .u-amt { font-size: 1.4rem; }
   .card { padding: 16px; }
-  .arow, .ahead { grid-template-columns: 1fr; }
-  .ahead { display: none; }
+  .masthead { padding: 26px 14px 22px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .chev { transition: transform .15s; }
 }
 </style>
-<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
 <body>
 <div class="wrap" dir="rtl" lang="ar">
-  <header><h1>توزيع تكاليف المبنى</h1></header>
+  <header class="masthead">
+    <h1 class="title"><span class="t-a">تكاليف عمارة</span><span class="t-b">النهضة المباركة</span><span class="t-c">إن شاء الله</span></h1>
+    <div class="orn" aria-hidden="true"><i></i></div>
+    <p class="tag">نصيب كل شقة من مصروفات العمارة بحسب مساحتها</p>
+  </header>
 
   <div class="tabbar" id="tabbar">
     <div class="tabs" role="tablist" aria-label="أقسام الصفحة">
@@ -221,7 +250,7 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 
   <!-- المصروفات -->
   <section id="panel-expenses" role="tabpanel" aria-labelledby="tab-expenses" class="wrap" style="gap:18px" hidden>
-    <p class="muted">اكتب المصروفات التي يدفعها المبنى كله. سنقسّم كل مصروف على الشقق حسب مساحتها.</p>
+    <p class="muted">اكتب المصروفات التي تدفعها العمارة كلها. سنقسّم كل مصروف على الشقق حسب مساحتها.</p>
     <div id="expenses" style="display:grid;gap:18px"></div>
     <button class="btn primary block" id="btn-add" type="button">+ إضافة مصروف جديد</button>
   </section>
@@ -314,8 +343,8 @@ function exact4(num, sum) {
 
 (function () {
   var KEY = 'building-cost-split:v4-ar';
-  var N_UNITS = 13;
-  var REAL_AREAS = ['167', '167', '167', '167', '167', '167', '250', '250', '250', '250', '250', '250', '400'];
+  var N_UNITS = 14;
+  var REAL_AREAS = ['167', '167', '167', '167', '167', '167', '167', '250', '250', '250', '250', '250', '250', '400'];
   var TABS = ['result', 'expenses', 'areas'];
 
   function $(s, r) { return (r || document).querySelector(s); }
@@ -338,10 +367,13 @@ function exact4(num, sum) {
   function parseState(raw) {
     try {
       var s = JSON.parse(raw);
-      if (!s || !Array.isArray(s.units) || s.units.length !== N_UNITS || !Array.isArray(s.expenses)) return null;
+      if (!s || !Array.isArray(s.units) || !Array.isArray(s.expenses)) return null;
+      var keepUnits = s.units.length === N_UNITS && !s.sampleAreas;
       return {
         sampleAreas: false, view: s.view === 'month' ? 'month' : 'year',
-        units: s.units.map(function (u, i) { return { name: String(u.name == null ? 'شقة ' + (i + 1) : u.name), area: s.sampleAreas ? REAL_AREAS[i] : String(u.area == null ? '' : u.area) }; }),
+        units: keepUnits
+          ? s.units.map(function (u, i) { return { name: String(u.name == null ? 'شقة ' + (i + 1) : u.name), area: String(u.area == null ? '' : u.area) }; })
+          : REAL_AREAS.map(function (a, i) { return { name: 'شقة ' + (i + 1), area: a }; }),
         expenses: s.expenses.map(function (e, i) {
           return {
             id: Number(e.id) || i + 1, name: String(e.name || ''), mode: e.mode === 'lump' ? 'lump' : 'qty',
@@ -417,12 +449,12 @@ function exact4(num, sum) {
     c = c || compute();
     var hero = $('#hero'), body = $('#result-body');
     if (!state.expenses.length || c.grand === 0n) {
-      hero.innerHTML = '<div class="hero-k">لا توجد مصروفات بعد</div><p class="hero-s">أضف مصروفات المبنى أولاً، وسنحسب لك ما تدفعه كل شقة.</p><button class="btn light" type="button" data-go="expenses">إضافة المصروفات</button>';
+      hero.innerHTML = '<div class="hero-k">لا توجد مصروفات بعد</div><p class="hero-s">أضف مصروفات العمارة أولاً، وسنحسب لك ما تدفعه كل شقة.</p><button class="btn light" type="button" data-go="expenses">إضافة المصروفات</button>';
       body.hidden = true;
       return;
     }
     body.hidden = false;
-    hero.innerHTML = '<div class="hero-k">مصروفات المبنى في السنة</div>' +
+    hero.innerHTML = '<div class="hero-k">مصروفات العمارة في السنة</div>' +
       '<div class="hero-v">' + L(fmtScaled(c.grand)) + '<small>ريال</small></div>' +
       '<p class="hero-s">أي حوالي ' + L(fmtScaled(monthly(c.grand))) + ' ريال في الشهر. تُقسَّم على ' + N_UNITS + ' شقة بحسب المساحة، فكلما كبرت الشقة زاد ما تدفعه.</p>';
 
@@ -445,7 +477,7 @@ function exact4(num, sum) {
         '<summary><div><span class="u-name">' + esc(unitLabel(u, i)) + '</span><span class="u-area">المساحة: ' + L(fmtArea(c.areas[i])) + ' متر مربع</span></div>' +
         '<span class="u-amt">' + L(fmtScaled(shown[i])) + '<small>ريال</small></span><span class="chev" aria-hidden="true"></span>' +
         '<span class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></span></summary>' +
-        '<div class="u-detail"><p>مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في المبنى، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.</p>' +
+        '<div class="u-detail"><p>مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في العمارة، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.</p>' +
         '<ul class="lines">' + lines +
         '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(c.unitTotals[i])) + ' ريال</span></li>' +
         '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(monthly(c.unitTotals[i]))) + ' ريال</span></li></ul></div></details>';
@@ -458,11 +490,11 @@ function exact4(num, sum) {
       check.textContent = 'المبلغ الشهري هو المبلغ السنوي ÷ 12، مقرَّباً لأقرب هللة.';
     } else if (total === c.grand) {
       check.className = 'check ok';
-      check.textContent = '✓ مجموع ما تدفعه الشقق يساوي مصروفات المبنى تماماً.';
+      check.textContent = '✓ مجموع ما تدفعه الشقق يساوي مصروفات العمارة تماماً.';
     } else {
       check.className = 'check';
       check.style.color = 'var(--bad)';
-      check.textContent = 'تنبيه: المجموع لا يطابق مصروفات المبنى. راجع الأرقام المدخلة.';
+      check.textContent = 'تنبيه: المجموع لا يطابق مصروفات العمارة. راجع الأرقام المدخلة.';
     }
   }
 
@@ -624,7 +656,7 @@ function exact4(num, sum) {
   /* ---------- المشاركة ---------- */
   function summaryText() {
     var c = compute(), lines = [];
-    lines.push('توزيع تكاليف المبنى');
+    lines.push('تكاليف عمارة النهضة المباركة إن شاء الله');
     if (c.exps.length) lines.push('المصروفات: ' + c.exps.map(function (x) { return expName(x.e); }).join('، '));
     lines.push('الإجمالي: ' + fmtScaled(c.grand) + ' ريال في السنة (حوالي ' + fmtScaled(monthly(c.grand)) + ' في الشهر)');
     lines.push('');
