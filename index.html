@@ -13,7 +13,7 @@
 [hidden] { display: none !important; }
 html, body { margin: 0; }
 
-/* التخطيط: عمود واحد بخط كبير. ترويسة زمردية بإطار ذهبي والاسم في المنتصف، ثم ثلاث تبويبات: النتيجة، المصروفات، المساحات. أرضية لؤلؤية فاتحة وبطاقات بيضاء وذهب خفيف للتفاصيل فقط. */
+/* التخطيط: لوحة متابعة. ترويسة زمردية بإطار ذهبي والاسم في المنتصف، ثم ثلاث تبويبات: لوحة المتابعة، المصروفات، الشقق والملاك. اللوحة: بطاقات أرقام في الأعلى، ثم رسم لحصة كل مالك، ثم بطاقات الشقق (أو الملاك). أرضية بيج وبطاقات بيضاء وذهب خفيف للتفاصيل فقط. */
 :root {
   font-size: 112.5%;
   --bg: #F2EBDC;
@@ -29,6 +29,7 @@ html, body { margin: 0; }
   --gold: #B88A32;
   --gold-light: #E8CB7C;
   --gold-pale: #F7EDD0;
+  --gold-ink: #6B4A0B;
   --bar: #C9A24E;
   --good: #146A44;
   --good-soft: #E1F3E8;
@@ -54,13 +55,17 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-.wrap { max-width: 760px; margin: 0 auto; display: grid; gap: 18px; }
+.shell { max-width: 1120px; margin: 0 auto; display: grid; gap: 18px; }
+.narrow { max-width: 760px; margin-inline: auto; width: 100%; display: grid; gap: 18px; min-width: 0; }
+.dash { display: grid; gap: 18px; min-width: 0; }
 h2 { font-family: var(--font-body); font-size: 1.3rem; font-weight: 700; margin: 0; text-wrap: balance; line-height: 1.5; color: var(--accent); }
+h2 small { display: block; font-size: .92rem; font-weight: 500; color: var(--ink-2); line-height: 1.6; }
 p { margin: 0; text-wrap: pretty; }
 button, select, input { font: inherit; color: inherit; }
 .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; font-variant-numeric: tabular-nums; }
 .muted { color: var(--ink-2); }
 :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+svg.ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
 /* الترويسة: الاسم في المنتصف */
 .masthead { position: relative; text-align: center; color: #fff; border-radius: 24px; padding: 30px 18px 24px; display: grid; justify-items: center; gap: 4px;
@@ -76,12 +81,12 @@ button, select, input { font: inherit; color: inherit; }
 .orn::before, .orn::after { content: ""; height: 1px; flex: 1; background: linear-gradient(90deg, transparent, var(--gold-light)); }
 .orn::after { background: linear-gradient(270deg, transparent, var(--gold-light)); }
 .orn i { width: 9px; height: 9px; background: var(--gold-light); transform: rotate(45deg); }
-.tag { color: #D7E6DE; font-size: 1rem; line-height: 1.7; }
+.tag-line { color: #D7E6DE; font-size: 1rem; line-height: 1.7; }
 
 /* التبويبات */
 .tabbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 6px 8px; }
-.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 6px; background: var(--surface-2); border-radius: 18px; }
-.tab { appearance: none; cursor: pointer; min-height: 56px; border: 2px solid transparent; border-radius: 13px; background: transparent; color: var(--ink-2); font-weight: 700; font-size: 1.05rem; padding: 4px 6px; line-height: 1.4; }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 6px; background: var(--surface-2); border-radius: 18px; max-width: 720px; margin-inline: auto; }
+.tab { appearance: none; cursor: pointer; min-height: 56px; border: 2px solid transparent; border-radius: 13px; background: transparent; color: var(--ink-2); font-weight: 700; font-size: 1.05rem; padding: 4px 6px; line-height: 1.35; text-wrap: balance; }
 .tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 var(--gold-light), 0 3px 10px rgba(11, 70, 55, .22); }
 .tab:hover:not([aria-selected="true"]) { border-color: var(--accent-2); color: var(--accent); background: rgba(255, 255, 255, .6); }
 
@@ -90,32 +95,55 @@ button, select, input { font: inherit; color: inherit; }
 .btn:hover { background: var(--accent-soft); }
 .btn.primary { background: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 var(--gold-light), 0 4px 12px rgba(11, 70, 55, .2); }
 .btn.primary:hover { background: var(--accent-2); }
-.btn.light { background: #FFFDF6; color: var(--accent); border-color: var(--gold-light); }
-.btn.light:hover { background: var(--gold-pale); }
 .btn.danger { border-color: var(--bad); color: var(--bad); background: var(--surface); }
 .btn.danger:hover { background: #FBE9E7; }
 .btn.armed { background: var(--bad); color: #fff; border-color: var(--bad); }
 .btn.block { width: 100%; }
-.btn.quiet { border-color: var(--line); color: var(--ink-2); font-weight: 600; }
+.btn.quiet { border-color: var(--line); color: var(--ink-2); font-weight: 600; background: rgba(255, 255, 255, .6); }
 .btn.small { min-height: 48px; padding: 6px 16px; }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 20px; min-width: 0; box-shadow: var(--shadow); }
-.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 18px; border-radius: 16px; background: var(--warn-soft); color: var(--warn); font-weight: 600; border: 1px solid #E3C77A; }
+.notice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 18px; border-radius: 16px; background: var(--warn-soft); color: var(--warn); font-weight: 600; border: 1px solid #E3C77A; }
+.notice.info { background: var(--surface); color: var(--ink); border: 2px dashed var(--gold); box-shadow: var(--shadow); }
 .notice p { flex: 1 1 14em; }
 
-/* بطاقة الإجمالي */
-.hero { position: relative; color: #fff; border-radius: 22px; padding: 24px 22px; display: grid; gap: 6px; justify-items: start; isolation: isolate; box-shadow: var(--shadow);
-  background-color: #0A3B2F;
-  background-image: var(--pattern), linear-gradient(155deg, #12654F 0%, #0B4637 60%, #08342A 100%); }
-.hero::after { content: ""; position: absolute; inset: 8px; border-radius: 15px; border: 1px solid rgba(232, 203, 124, .38); pointer-events: none; z-index: -1; }
-.hero :focus-visible { outline-color: #fff; }
-.hero-k { font-size: 1.1rem; font-weight: 600; color: var(--gold-light); }
-.hero-v { font: 700 2.6rem/1.3 var(--font-body); color: #FFFDF6; }
-.hero-v small { font-size: 1.2rem; font-weight: 600; margin-inline-start: 8px; color: var(--gold-light); }
-.hero-s { font-size: 1.05rem; color: #E3EEE8; }
+/* بطاقات الأرقام */
+.kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.kpi { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 14px 16px 12px; box-shadow: var(--shadow); display: grid; gap: 0; min-width: 0; align-content: start; }
+.kpi .k-top { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-weight: 600; font-size: .95rem; line-height: 1.5; }
+.kpi .k-top .ic { color: var(--gold); }
+.kpi .k-v { font-weight: 700; font-size: 1.9rem; line-height: 1.35; color: var(--accent); font-variant-numeric: tabular-nums; }
+.kpi .k-v small { font-size: .95rem; color: var(--ink-2); font-weight: 600; margin-inline-start: 6px; }
+.kpi .k-s { color: var(--ink-2); font-size: .88rem; line-height: 1.6; }
+.kpi.primary { grid-column: 1 / -1; color: #fff; border: 0; padding: 22px 22px 20px; isolation: isolate;
+  background-color: #0A3B2F; background-image: var(--pattern), linear-gradient(155deg, #12654F 0%, #0B4637 60%, #08342A 100%); }
+.kpi.primary::after { content: ""; position: absolute; inset: 8px; border-radius: 15px; border: 1px solid rgba(232, 203, 124, .38); pointer-events: none; z-index: -1; }
+.kpi.primary .k-top { color: var(--gold-light); font-size: 1.1rem; }
+.kpi.primary .k-top .ic { color: var(--gold-light); }
+.kpi.primary .k-v { color: #FFFDF6; font-size: 2.7rem; }
+.kpi.primary .k-v small { color: var(--gold-light); font-size: 1.2rem; }
+.kpi.primary .k-s { color: #E3EEE8; font-size: 1.02rem; }
+.kpi.primary :focus-visible { outline-color: #fff; }
 
-/* التبديل بين سنوي وشهري */
-.view-row { display: grid; gap: 6px; }
+/* الرسم: حصة كل مالك */
+.mid { display: grid; gap: 18px; min-width: 0; }
+.obars { display: grid; gap: 12px; margin-top: 14px; }
+.ob { display: grid; grid-template-columns: minmax(4.6rem, 7.6rem) minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 2px 0; }
+.ob-name { font-weight: 600; line-height: 1.45; }
+.ob-name small { display: block; font-weight: 500; color: var(--ink-2); font-size: .82rem; line-height: 1.4; }
+.ob-track { height: 14px; border-radius: 7px; background: var(--surface-2); overflow: hidden; }
+.ob-track i { display: block; height: 100%; border-radius: 7px; background: linear-gradient(270deg, #DDB964, #B88A32); }
+.ob-val { font-weight: 700; font-variant-numeric: tabular-nums; text-align: end; min-width: 4.6rem; line-height: 1.35; white-space: nowrap; }
+.ob-val small { display: block; color: var(--ink-2); font-weight: 600; font-size: .82rem; }
+.ob:hover .ob-track i { filter: brightness(1.08); }
+.method ol { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
+.method li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
+.method li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gold-pale); border: 1px solid var(--gold-light); color: var(--accent); font-weight: 700; }
+.method .foot { margin-top: 12px; color: var(--ink-2); }
+.method .side { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: var(--gold-pale); color: var(--gold-ink); font-weight: 600; line-height: 1.7; }
+
+/* شريط الاختيارات */
+.toolbar { display: grid; gap: 12px; }
 .lab { font-weight: 700; font-size: 1.05rem; color: var(--ink); padding: 0; }
 fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px; margin-top: 6px; }
@@ -126,37 +154,46 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .seg input:checked + span { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: inset 0 -3px 0 var(--gold-light); }
 .seg input:focus-visible + span { outline: 3px solid var(--accent-2); outline-offset: 3px; }
 
-/* قائمة الشقق */
-.units { display: grid; gap: 10px; }
-details.unit { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 1px 2px rgba(11, 70, 55, .05); }
-details.unit[open] { border-color: var(--gold); box-shadow: var(--shadow); }
-details.unit summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 4px 14px; padding: 14px 18px; min-height: 76px; border-radius: 18px; }
-details.unit summary::-webkit-details-marker { display: none; }
-details.unit summary:hover { background: var(--accent-soft); }
-.u-name { font-weight: 700; font-size: 1.2rem; line-height: 1.5; }
-.u-area { display: block; font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
-.u-amt { font-weight: 700; font-size: 1.6rem; line-height: 1.3; white-space: nowrap; color: var(--accent); }
-.u-amt small { font-size: 0.95rem; font-weight: 600; color: var(--ink-2); margin-inline-start: 6px; }
-.chev { width: 12px; height: 12px; border-right: 3px solid var(--gold); border-bottom: 3px solid var(--gold); transform: rotate(45deg); margin-block: -4px 4px; }
-details.unit[open] .chev { transform: rotate(225deg); margin-block: 4px -4px; }
-.u-bar { grid-column: 1 / -1; height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; margin-top: 4px; }
+/* بطاقات الشقق والملاك */
+.units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; align-items: start; }
+.apt { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: 0 1px 2px rgba(11, 70, 55, .05), 0 6px 18px rgba(11, 70, 55, .05); display: grid; gap: 10px; min-width: 0; }
+.apt[open], .apt.open { border-color: var(--gold); }
+.apt-h { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+.no { width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 1.15rem; box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--gold-light); font-variant-numeric: tabular-nums; }
+.no .ic { width: 24px; height: 24px; }
+.apt-name { font-weight: 700; font-size: 1.25rem; line-height: 1.4; }
+.apt-sub { color: var(--ink-2); font-size: .92rem; line-height: 1.55; }
+.pct { font-weight: 700; font-size: .92rem; background: var(--gold-pale); color: var(--gold-ink); padding: 2px 12px; border-radius: 999px; border: 1px solid var(--gold-light); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.apt-amt { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.apt-amt b { font-size: 2rem; line-height: 1.25; color: var(--accent); font-variant-numeric: tabular-nums; }
+.apt-amt b.dash-v { color: var(--ink-2); font-weight: 500; }
+.apt-amt small { color: var(--ink-2); font-weight: 600; font-size: .95rem; }
+.u-bar { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
 .u-bar i { display: block; height: 100%; background: linear-gradient(270deg, #DDB964, #B88A32); border-radius: 4px; }
-.u-detail { padding: 4px 18px 18px; display: grid; gap: 10px; }
-.u-detail .lines { list-style: none; margin: 0; padding: 0; }
-.u-detail .lines li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
-.u-detail .lines li.sum { font-weight: 700; border-bottom: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { display: inline-flex; align-items: center; gap: 6px; padding: 2px 12px 2px 10px; border-radius: 999px; font-size: .9rem; font-weight: 600; line-height: 1.7; background: var(--accent-soft); color: var(--accent); border: 1px solid #C4DCD0; }
+.tag .ic { width: 18px; height: 18px; }
+.tag.room { background: var(--gold-pale); color: var(--gold-ink); border-color: var(--gold-light); }
+details.more { border-top: 1px solid var(--line); padding-top: 4px; }
+details.more summary { list-style: none; cursor: pointer; min-height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 600; color: var(--accent); border-radius: 10px; }
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary:hover { background: var(--accent-soft); }
+.chev { width: 11px; height: 11px; border-right: 3px solid var(--gold); border-bottom: 3px solid var(--gold); transform: rotate(45deg); margin-inline-end: 6px; margin-block: -4px 0; }
+details.more[open] .chev { transform: rotate(225deg); margin-block: 4px 0; }
+.lines { list-style: none; margin: 4px 0 0; padding: 0; }
+.lines li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.lines li.sum { font-weight: 700; border-bottom: 0; }
+.lines li.sub { color: var(--ink-2); font-size: .95rem; }
+.note-s { color: var(--ink-2); font-size: .92rem; line-height: 1.7; padding-top: 6px; }
 .totalbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 16px; font-weight: 700; font-size: 1.25rem; color: var(--accent); }
 .check { font-weight: 600; }
 .check.ok { color: var(--good); background: var(--good-soft); padding: 10px 16px; border-radius: 14px; }
-
-.method ol { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; counter-reset: s; }
-.method li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; }
-.method li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--gold-pale); border: 1px solid var(--gold-light); color: var(--accent); font-weight: 700; }
-.method .foot { margin-top: 12px; color: var(--ink-2); }
 .share-row { display: grid; gap: 10px; margin-top: 12px; }
+.pair-2 { display: grid; gap: 18px; min-width: 0; }
 
 /* الحقول */
 .field { display: grid; gap: 4px; min-width: 0; }
+.lab-s { font-size: .92rem; font-weight: 600; color: var(--ink-2); line-height: 1.6; }
 input[type=text] { width: 100%; min-height: 56px; padding: 8px 14px; border: 2px solid var(--line); border-radius: 14px; background: var(--surface); font-size: 1.1rem; line-height: 1.5; }
 input[type=text]:hover { border-color: var(--ink-2); }
 input[type=text]:focus-visible { border-color: var(--accent-2); outline-offset: 1px; }
@@ -172,13 +209,17 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 .how-line { color: var(--ink-2); font-size: 0.95rem; line-height: 1.8; }
 .empty { padding: 8px 2px; color: var(--ink-2); }
 
-/* المساحات */
-.areas { display: grid; gap: 10px; margin-top: 12px; }
-.arow, .ahead { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 10px; align-items: center; }
-.a-field { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.a-field span { white-space: nowrap; color: var(--ink-2); font-weight: 600; font-size: .95rem; }
-.ahead { font-weight: 700; color: var(--ink-2); font-size: 0.95rem; }
-.total-line { margin-top: 14px; padding: 14px 16px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 14px; font-weight: 700; font-size: 1.15rem; color: var(--accent); }
+/* الشقق والملاك (التعديل) */
+.edit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 12px; align-items: start; }
+.eu { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px; display: grid; gap: 12px; min-width: 0; box-shadow: 0 1px 2px rgba(11, 70, 55, .05); }
+.eu-h { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: end; }
+.eu-h .no { margin-bottom: 5px; }
+.eu-f { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 10px; }
+.room-row { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 6px 12px; border-radius: 14px; border: 2px solid var(--line); cursor: pointer; font-weight: 600; background: var(--surface); }
+.room-row:hover { border-color: var(--accent-2); }
+.room-row input { width: 26px; height: 26px; accent-color: var(--accent); margin: 0; flex: none; }
+.room-row:has(input:checked) { background: var(--gold-pale); border-color: var(--gold); color: var(--gold-ink); }
+.total-line { margin-top: 14px; padding: 14px 16px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 14px; font-weight: 700; font-size: 1.1rem; color: var(--accent); display: flex; flex-wrap: wrap; gap: 4px 22px; }
 
 .foot-row { display: flex; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
 
@@ -186,48 +227,59 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
   padding: 14px max(16px, env(safe-area-inset-left, 0px)) calc(14px + env(safe-area-inset-bottom, 0px)); background: var(--accent); color: #fff; font-weight: 600; border-top: 2px solid var(--gold-light); }
 .toast button { appearance: none; cursor: pointer; min-height: 44px; padding: 4px 18px; border-radius: 10px; border: 2px solid var(--gold-light); background: transparent; color: #fff; font-weight: 700; }
 
+@media (min-width: 640px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .toolbar { grid-template-columns: 1fr 1fr; gap: 18px; }
+  .masthead { padding: 34px 24px 28px; }
+}
+@media (min-width: 900px) {
+  .kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .kpi.primary { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 36px; padding: 24px 30px; }
+  .kpi.primary .k-top { grid-column: 1; }
+  .kpi.primary .k-v { grid-column: 1; }
+  .kpi.primary .k-s { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 1.1rem; max-width: 34em; }
+  .mid { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; }
+  .pair-2 { grid-template-columns: 1fr 1fr; align-items: start; }
+}
 @media (max-width: 480px) {
-  .hero-v { font-size: 2.2rem; }
-  .u-amt { font-size: 1.4rem; }
+  .kpi .k-v { font-size: 1.65rem; }
+  .kpi.primary .k-v { font-size: 2.3rem; }
+  .apt-amt b { font-size: 1.75rem; }
   .card { padding: 16px; }
   .masthead { padding: 26px 14px 22px; }
+  .ob { grid-template-columns: minmax(4.2rem, 6rem) minmax(0, 1fr) auto; gap: 10px; }
 }
 @media (prefers-reduced-motion: no-preference) {
   .chev { transition: transform .15s; }
+  .ob-track i, .u-bar i { transition: width .35s ease; }
 }
 </style>
 </head>
 <body>
-<div class="wrap" dir="rtl" lang="ar">
+<div class="shell" dir="rtl" lang="ar">
   <header class="masthead">
     <h1 class="title"><span class="t-a">مصاريف عمارة</span><span class="t-b">النهضة المباركة</span><span class="t-c">إن شاء الله</span></h1>
     <div class="orn" aria-hidden="true"><i></i></div>
-    <p class="tag">المستحق من كل شقة من مصروفات العمارة بحسب مساحتها</p>
+    <p class="tag-line">المستحق من كل شقة من مصروفات العمارة بحسب مساحتها</p>
   </header>
 
   <div class="tabbar" id="tabbar">
     <div class="tabs" role="tablist" aria-label="أقسام الصفحة">
-      <button class="tab" id="tab-result" role="tab" aria-selected="true" aria-controls="panel-result" type="button">النتيجة</button>
+      <button class="tab" id="tab-result" role="tab" aria-selected="true" aria-controls="panel-result" type="button">لوحة المتابعة</button>
       <button class="tab" id="tab-expenses" role="tab" aria-selected="false" aria-controls="panel-expenses" type="button">المصروفات</button>
-      <button class="tab" id="tab-areas" role="tab" aria-selected="false" aria-controls="panel-areas" type="button">المساحات</button>
+      <button class="tab" id="tab-areas" role="tab" aria-selected="false" aria-controls="panel-areas" type="button">الشقق والملاك</button>
     </div>
   </div>
 
-  <!-- النتيجة -->
-  <section id="panel-result" role="tabpanel" aria-labelledby="tab-result" class="wrap" style="gap:18px">
-    <div class="notice" id="notice-result" hidden></div>
-    <div class="hero" id="hero"></div>
-    <div id="result-body" style="display:grid;gap:18px">
-      <fieldset class="view-row" id="view-seg">
-        <legend class="lab">اعرض ما تدفعه كل شقة:</legend>
-        <div class="seg">
-          <label><input type="radio" name="view" value="year" checked><span>في السنة</span></label>
-          <label><input type="radio" name="view" value="month"><span>في الشهر</span></label>
-        </div>
-      </fieldset>
-      <div class="units" id="units"></div>
-      <div class="totalbar" id="totalbar"></div>
-      <p class="check" id="check"></p>
+  <!-- لوحة المتابعة -->
+  <section id="panel-result" role="tabpanel" aria-labelledby="tab-result" class="dash">
+    <div class="notice info" id="notice-result" hidden></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="mid">
+      <section class="card" id="chart-card" aria-labelledby="chart-h">
+        <h2 id="chart-h">حصة كل مالك<small id="chart-sub"></small></h2>
+        <div class="obars" id="obars"></div>
+      </section>
       <section class="card method">
         <h2>كيف نحسب؟</h2>
         <ol>
@@ -236,7 +288,29 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
           <li><span>تدفع كل شقة هذه النسبة من كل مصروف.</span></li>
         </ol>
         <p class="foot">المبالغ محسوبة بالهللة، ومجموعها يساوي إجمالي المصروفات تماماً دون زيادة أو نقص.</p>
+        <p class="side">مواقف السيارات وغرف السائق مسجّلة هنا للمعرفة فقط. لا تدخل في الحساب حتى تُحدَّد طريقة احتساب تكلفتها.</p>
       </section>
+    </div>
+    <div id="result-body" class="dash">
+      <div class="toolbar">
+        <fieldset id="view-seg">
+          <legend class="lab">اعرض ما تدفعه:</legend>
+          <div class="seg">
+            <label><input type="radio" name="view" value="year" checked><span>في السنة</span></label>
+            <label><input type="radio" name="view" value="month"><span>في الشهر</span></label>
+          </div>
+        </fieldset>
+        <fieldset id="group-seg">
+          <legend class="lab">اعرض حسب:</legend>
+          <div class="seg">
+            <label><input type="radio" name="group" value="apt" checked><span>الشقق</span></label>
+            <label><input type="radio" name="group" value="owner"><span>الملاك</span></label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="units-grid" id="units"></div>
+      <div class="totalbar" id="totalbar"></div>
+      <p class="check" id="check"></p>
       <section class="card">
         <h2>مشاركة النتيجة</h2>
         <div class="share-row">
@@ -249,23 +323,22 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
   </section>
 
   <!-- المصروفات -->
-  <section id="panel-expenses" role="tabpanel" aria-labelledby="tab-expenses" class="wrap" style="gap:18px" hidden>
+  <section id="panel-expenses" role="tabpanel" aria-labelledby="tab-expenses" class="narrow" hidden>
     <p class="muted">اكتب المصروفات التي تدفعها العمارة كلها. سنقسّم كل مصروف على الشقق حسب مساحتها.</p>
     <div id="expenses" style="display:grid;gap:18px"></div>
+    <div class="totalbar" id="exp-total" hidden></div>
     <button class="btn primary block" id="btn-add" type="button">+ إضافة مصروف جديد</button>
   </section>
 
-  <!-- المساحات -->
-  <section id="panel-areas" role="tabpanel" aria-labelledby="tab-areas" class="wrap" style="gap:18px" hidden>
+  <!-- الشقق والملاك -->
+  <section id="panel-areas" role="tabpanel" aria-labelledby="tab-areas" class="dash" hidden>
     <div class="notice" id="notice-areas" hidden></div>
-    <div class="card">
-      <p class="muted">اكتب مساحة كل شقة بالمتر المربع. ويمكنك تغيير اسم الشقة.</p>
-      <div class="areas" id="areas"></div>
-      <div class="total-line" id="area-total"></div>
-    </div>
+    <p class="muted">لكل شقة: اسم المالك، والمساحة بالمتر المربع، وعدد المواقف، وهل لصاحبها غرفة سائق في البدروم.</p>
+    <div class="edit-grid" id="areas"></div>
+    <div class="total-line" id="area-total"></div>
   </section>
 
-  <div class="foot-row"><button class="btn quiet small" id="btn-reset" type="button">البدء من جديد (يمسح كل البيانات)</button></div>
+  <div class="foot-row"><button class="btn quiet small" id="btn-reset" type="button">إعادة الضبط (يمسح المصروفات)</button></div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -342,10 +415,38 @@ function exact4(num, sum) {
 //#core-end
 
 (function () {
-  var KEY = 'building-cost-split:v4-ar';
+  var KEY = 'building-cost-split:v5-ar';
   var N_UNITS = 14;
-  var REAL_AREAS = ['167', '167', '167', '167', '167', '167', '167', '250', '250', '250', '250', '250', '250', '400'];
+  /* المالك، المساحة، عدد المواقف، غرفة سائق (1 = نعم) */
+  var DEF = [
+    ['نايف', '167', 0, 0],
+    ['الوالد', '167', 0, 0],
+    ['عبدالله', '167', 0, 0],
+    ['حسين', '167', 1, 1],
+    ['خالد', '167', 1, 0],
+    ['الوالد', '167', 0, 1],
+    ['عبد الرحمن', '167', 0, 0],
+    ['ممدوح', '250', 3, 1],
+    ['فيصل', '250', 1, 1],
+    ['الوالد', '250', 0, 0],
+    ['عبد العزيز', '250', 2, 1],
+    ['أحمد', '250', 0, 0],
+    ['محمد', '250', 2, 1],
+    ['الوالد', '400', 0, 0]
+  ];
   var TABS = ['result', 'expenses', 'areas'];
+
+  var ICONS = {
+    money: '<rect x="3" y="6" width="18" height="12" rx="3"/><circle cx="12" cy="12" r="2.6"/><path d="M6.5 9.5v.01M17.5 14.5v.01"/>',
+    apt: '<path d="M4 21V5l8-3 8 3v16M9 21v-4h6v4M8 9h2M14 9h2M8 13h2M14 13h2"/>',
+    owners: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.2 2.7-5.2 6-5.2s6 2 6 5.2"/><circle cx="17" cy="9" r="2.6"/><path d="M17 14.2c2.6 0 4.6 1.6 4.6 4.3"/>',
+    area: '<path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/>',
+    parking: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9.5 17V7.5H13a3 3 0 0 1 0 6H9.5"/>',
+    room: '<circle cx="7.5" cy="15.5" r="3.5"/><path d="M10 13l9-9M15.5 8.5l3 3M13 11l2 2"/>',
+    list: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6"/>',
+    person: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3-6 7-6s7 2.4 7 6"/>'
+  };
+  function ic(name) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[name] + '</svg>'; }
 
   function $(s, r) { return (r || document).querySelector(s); }
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -353,27 +454,29 @@ function exact4(num, sum) {
   function trimZeros(s) { return s.indexOf('.') >= 0 ? s.replace(/0+$/, '').replace(/\.$/, '') : s; }
   function fmtArea(v) { return trimZeros(fmtScaled(v, 2)); }
   function fmtQty(q) { return trimZeros(fmtScaled(parseScaled(q, 3), 3)); }
-  function unitLabel(u, i) { return u.name || 'شقة ' + (i + 1); }
+  function unitLabel(i) { return 'شقة ' + (i + 1); }
   function sumBig(arr) { return arr.reduce(function (a, b) { return a + b; }, 0n); }
   function monthly(h) { return (h + 6n) / 12n; }
+  function isValidInt(v) { var s = normDigits(v); return s === '' || /^\d{1,2}$/.test(s); }
+  function parkCount(u) { var s = normDigits(u.parking); return /^\d+$/.test(s) ? Math.min(99, parseInt(s, 10)) : 0; }
+  function ownerOf(u, i) { return String(u.owner || '').trim() || unitLabel(i); }
+  function parkWord(n) { return n === 1 ? 'موقف' : n === 2 ? 'موقفان' : n + ' مواقف'; }
+  function roomWord(n) { return n === 1 ? 'غرفة سائق' : n === 2 ? 'غرفتا سائق' : n + ' غرف سائق'; }
+  function flatRows(arr) { return arr; }
 
-  function sampleState() {
-    return {
-      sampleAreas: false, view: 'year',
-      units: REAL_AREAS.map(function (a, i) { return { name: 'شقة ' + (i + 1), area: a }; }),
-      expenses: []
-    };
+  function defaultUnits() {
+    return DEF.map(function (d) { return { owner: d[0], area: d[1], parking: String(d[2]), room: !!d[3] }; });
   }
+  function sampleState() { return { view: 'year', group: 'apt', units: defaultUnits(), expenses: [] }; }
   function parseState(raw) {
     try {
       var s = JSON.parse(raw);
-      if (!s || !Array.isArray(s.units) || !Array.isArray(s.expenses)) return null;
-      var keepUnits = s.units.length === N_UNITS && !s.sampleAreas;
+      if (!s || !Array.isArray(s.units) || s.units.length !== N_UNITS || !Array.isArray(s.expenses)) return null;
       return {
-        sampleAreas: false, view: s.view === 'month' ? 'month' : 'year',
-        units: keepUnits
-          ? s.units.map(function (u, i) { return { name: String(u.name == null ? 'شقة ' + (i + 1) : u.name), area: String(u.area == null ? '' : u.area) }; })
-          : REAL_AREAS.map(function (a, i) { return { name: 'شقة ' + (i + 1), area: a }; }),
+        view: s.view === 'month' ? 'month' : 'year', group: s.group === 'owner' ? 'owner' : 'apt',
+        units: s.units.map(function (u, i) {
+          return { owner: String(u.owner == null ? DEF[i][0] : u.owner), area: String(u.area == null ? '' : u.area), parking: String(u.parking == null ? '0' : u.parking), room: !!u.room };
+        }),
         expenses: s.expenses.map(function (e, i) {
           return {
             id: Number(e.id) || i + 1, name: String(e.name || ''), mode: e.mode === 'lump' ? 'lump' : 'qty',
@@ -400,7 +503,10 @@ function exact4(num, sum) {
 
   function nextId() { return state.expenses.reduce(function (m, e) { return Math.max(m, e.id); }, 0) + 1; }
   function expName(e) { return e.name.trim() || 'مصروف بلا اسم'; }
-  function markValidity(input) { input.setAttribute('aria-invalid', isValidNum(input.value) ? 'false' : 'true'); }
+  function markValidity(input) {
+    var ok = input.dataset.int ? isValidInt(input.value) : isValidNum(input.value);
+    input.setAttribute('aria-invalid', ok ? 'false' : 'true');
+  }
 
   /* ---------- رسالة قصيرة ---------- */
   function say(text, undo) {
@@ -432,6 +538,18 @@ function exact4(num, sum) {
     var grand = exps.reduce(function (s, x) { return s + x.total; }, 0n);
     return { areas: areas, sumArea: sumArea, exps: exps, unitTotals: unitTotals, grand: grand };
   }
+  /* تجميع الشقق حسب المالك (الاسم نفسه = مالك واحد) */
+  function ownerGroups(c) {
+    var map = {}, order = [];
+    state.units.forEach(function (u, i) {
+      var key = ownerOf(u, i);
+      if (!map[key]) { map[key] = { name: key, idx: [], area: 0n, amt: 0n, mon: 0n, parking: 0, rooms: 0 }; order.push(key); }
+      var g = map[key];
+      g.idx.push(i); g.area += c.areas[i]; g.amt += c.unitTotals[i]; g.mon += monthly(c.unitTotals[i]);
+      g.parking += parkCount(u); g.rooms += u.room ? 1 : 0;
+    });
+    return order.map(function (k) { return map[k]; });
+  }
 
   /* ---------- التبويبات ---------- */
   function showTab(name) {
@@ -444,47 +562,149 @@ function exact4(num, sum) {
     try { window.scrollTo(0, 0); } catch (e) { /* ignore */ }
   }
 
-  /* ---------- النتيجة ---------- */
-  function renderResult(c) {
-    c = c || compute();
-    var hero = $('#hero'), body = $('#result-body');
-    if (!state.expenses.length || c.grand === 0n) {
-      hero.innerHTML = '<div class="hero-k">لا توجد مصروفات بعد</div><p class="hero-s">أضف مصروفات العمارة أولاً، وسنحسب لك ما تدفعه كل شقة.</p><button class="btn light" type="button" data-go="expenses">إضافة المصروفات</button>';
-      body.hidden = true;
-      return;
-    }
-    body.hidden = false;
-    hero.innerHTML = '<div class="hero-k">مصروفات العمارة في السنة</div>' +
-      '<div class="hero-v">' + L(fmtScaled(c.grand)) + '<small>ريال</small></div>' +
-      '<p class="hero-s">أي حوالي ' + L(fmtScaled(monthly(c.grand))) + ' ريال في الشهر. تُقسَّم على ' + N_UNITS + ' شقة بحسب المساحة، فكلما كبرت الشقة زاد ما تدفعه.</p>';
-
-    var hasArea = c.sumArea > 0n;
-    var units = $('#units'), totalbar = $('#totalbar'), check = $('#check');
-    $('#view-seg').hidden = !hasArea;
-    if (!hasArea) { units.innerHTML = ''; totalbar.hidden = true; check.hidden = true; return; }
-    totalbar.hidden = false; check.hidden = false;
-
-    var month = state.view === 'month';
+  /* ---------- لوحة المتابعة ---------- */
+  function tile(icon, label, val, unit, sub) {
+    return '<div class="kpi"><div class="k-top">' + ic(icon) + '<span>' + label + '</span></div>' +
+      '<div class="k-v">' + val + (unit ? '<small>' + unit + '</small>' : '') + '</div><div class="k-s">' + sub + '</div></div>';
+  }
+  function renderKpis(c, has, groups) {
+    var park = state.units.reduce(function (s, u) { return s + parkCount(u); }, 0);
+    var rooms = state.units.reduce(function (s, u) { return s + (u.room ? 1 : 0); }, 0);
+    var multi = groups.filter(function (g) { return g.idx.length > 1; }).map(function (g) { return esc(g.name) + ' (' + g.idx.length + ' شقق)'; }).join('، ');
+    var primary = '<div class="kpi primary"><div class="k-top">' + ic('money') + '<span>مصروفات العمارة في السنة</span></div>' +
+      '<div class="k-v">' + L(fmtScaled(c.grand)) + '<small>ريال</small></div>' +
+      '<div class="k-s">' + (has
+        ? 'أي حوالي ' + L(fmtScaled(monthly(c.grand))) + ' ريال في الشهر. تُقسَّم على ' + N_UNITS + ' شقة بحسب المساحة، فكلما كبرت الشقة زاد ما تدفعه.'
+        : 'لم تُضف مصروفات بعد. أضف أول مصروف وستظهر الأرقام هنا.') + '</div></div>';
+    $('#kpis').innerHTML = primary +
+      tile('apt', 'الشقق', N_UNITS, '', 'في العمارة') +
+      tile('owners', 'الملاك', groups.length, '', multi || 'مالك') +
+      tile('area', 'إجمالي المساحة', L(fmtArea(c.sumArea)), 'م²', 'مساحة الشقق') +
+      tile('parking', 'مواقف السيارات', park, '', 'تكلفتها تُحسب لاحقاً') +
+      tile('room', 'غرف السائق', rooms, '', 'في البدروم') +
+      tile('list', 'بنود المصروفات', c.exps.length, '', c.exps.length ? 'مسجّلة' : 'لا يوجد بعد');
+  }
+  function renderBars(c, groups, has, month) {
+    var sorted = groups.map(function (g, k) { return { g: g, k: k }; }).sort(function (a, b) {
+      if (a.g.area !== b.g.area) return a.g.area > b.g.area ? -1 : 1;
+      return a.k - b.k;
+    }).map(function (x) { return x.g; });
+    var maxArea = sorted.reduce(function (m, g) { return g.area > m ? g.area : m; }, 0n);
+    $('#chart-sub').textContent = has ? 'المبلغ ' + (month ? 'الشهري' : 'السنوي') + ' ونسبة المساحة لكل مالك' : 'نسبة مساحة شقق كل مالك من العمارة';
+    if (c.sumArea === 0n) { $('#obars').innerHTML = '<p class="empty">اكتب مساحات الشقق لتظهر الحصص.</p>'; return; }
+    $('#obars').innerHTML = sorted.map(function (g) {
+      var pct = Number(g.area) / Number(c.sumArea) * 100;
+      var w = Math.max(3, Number(g.area) / Number(maxArea) * 100);
+      var sub = g.idx.length > 1 ? g.idx.length + ' شقق' : 'شقة ' + (g.idx[0] + 1);
+      var val = has
+        ? L(fmtScaled(month ? g.mon : g.amt)) + '<small>' + L(pct.toFixed(1) + '%') + '</small>'
+        : L(pct.toFixed(1) + '%');
+      return '<div class="ob" title="' + esc(g.name) + ': ' + pct.toFixed(1) + '% من مساحة العمارة">' +
+        '<div class="ob-name">' + esc(g.name) + '<small>' + sub + '</small></div>' +
+        '<div class="ob-track" aria-hidden="true"><i style="width:' + w.toFixed(1) + '%"></i></div>' +
+        '<div class="ob-val">' + val + '</div></div>';
+    }).join('');
+  }
+  function tagsHtml(park, rooms) {
+    var t = '';
+    if (park > 0) t += '<span class="tag">' + ic('parking') + parkWord(park) + '</span>';
+    if (rooms > 0) t += '<span class="tag room">' + ic('room') + roomWord(rooms) + '</span>';
+    return t ? '<div class="tags">' + t + '</div>' : '';
+  }
+  function amtHtml(has, val, month) {
+    return has
+      ? '<div class="apt-amt"><b>' + L(fmtScaled(val)) + '</b><small>ريال / ' + (month ? 'شهر' : 'سنة') + '</small></div>'
+      : '<div class="apt-amt"><b class="dash-v">—</b><small>بانتظار المصروفات</small></div>';
+  }
+  function aptCard(c, i, has, month) {
+    var u = state.units[i];
+    var pct = c.sumArea > 0n ? Number(c.areas[i]) / Number(c.sumArea) * 100 : 0;
     var maxArea = c.areas.reduce(function (a, b) { return b > a ? b : a; }, 0n);
-    var shown = c.unitTotals.map(function (h) { return month ? monthly(h) : h; });
-    units.innerHTML = state.units.map(function (u, i) {
-      var pct = Number(c.areas[i]) / Number(c.sumArea) * 100;
-      var bar = Math.max(3, Number(c.areas[i]) / Number(maxArea) * 100);
+    var bar = maxArea > 0n ? Math.max(3, Number(c.areas[i]) / Number(maxArea) * 100) : 0;
+    var shown = month ? monthly(c.unitTotals[i]) : c.unitTotals[i];
+    var more = '';
+    if (has) {
       var lines = c.exps.map(function (x) {
         return '<li><span>' + esc(expName(x.e)) + '</span><span><b>' + L(fmtScaled(x.shares[i])) + '</b> ريال</span></li>';
       }).join('');
-      return '<details class="unit" data-i="' + i + '"' + (openUnits[i] ? ' open' : '') + '>' +
-        '<summary><div><span class="u-name">' + esc(unitLabel(u, i)) + '</span><span class="u-area">المساحة: ' + L(fmtArea(c.areas[i])) + ' متر مربع</span></div>' +
-        '<span class="u-amt">' + L(fmtScaled(shown[i])) + '<small>ريال</small></span><span class="chev" aria-hidden="true"></span>' +
-        '<span class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></span></summary>' +
-        '<div class="u-detail"><p>مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في العمارة، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.</p>' +
+      more = '<details class="more" data-k="a' + i + '"' + (openUnits['a' + i] ? ' open' : '') + '><summary><span>تفاصيل الحساب</span><span class="chev" aria-hidden="true"></span></summary>' +
+        '<p class="note-s">مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في العمارة، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.</p>' +
         '<ul class="lines">' + lines +
         '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(c.unitTotals[i])) + ' ريال</span></li>' +
-        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(monthly(c.unitTotals[i]))) + ' ريال</span></li></ul></div></details>';
-    }).join('');
+        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(monthly(c.unitTotals[i]))) + ' ريال</span></li></ul></details>';
+    }
+    return '<article class="apt"><div class="apt-h"><span class="no">' + (i + 1) + '</span>' +
+      '<div><div class="apt-name">' + esc(ownerOf(u, i)) + '</div><div class="apt-sub">' + unitLabel(i) + ' · ' + L(fmtArea(c.areas[i])) + ' م²</div></div>' +
+      '<span class="pct">' + L(pct.toFixed(1) + '%') + '</span></div>' +
+      amtHtml(has, shown, month) +
+      '<div class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></div>' +
+      tagsHtml(parkCount(u), u.room ? 1 : 0) + more + '</article>';
+  }
+  function ownerCard(c, g, gi, has, month) {
+    var pct = c.sumArea > 0n ? Number(g.area) / Number(c.sumArea) * 100 : 0;
+    var maxArea = groupsMax;
+    var bar = maxArea > 0n ? Math.max(3, Number(g.area) / Number(maxArea) * 100) : 0;
+    var shown = month ? g.mon : g.amt;
+    var aptsTxt = g.idx.length > 1 ? 'شقق ' + g.idx.map(function (i) { return i + 1; }).join('، ') : unitLabel(g.idx[0]);
+    var more = '';
+    if (has) {
+      var perExp = c.exps.map(function (x) {
+        var s = g.idx.reduce(function (a, i) { return a + x.shares[i]; }, 0n);
+        return '<li><span>' + esc(expName(x.e)) + '</span><span><b>' + L(fmtScaled(s)) + '</b> ريال</span></li>';
+      }).join('');
+      var perApt = g.idx.length > 1 ? g.idx.map(function (i) {
+        return '<li class="sub"><span>' + unitLabel(i) + '</span><span>' + L(fmtScaled(c.unitTotals[i])) + ' ريال في السنة</span></li>';
+      }).join('') : '';
+      more = '<details class="more" data-k="o' + gi + '"' + (openUnits['o' + gi] ? ' open' : '') + '><summary><span>تفاصيل الحساب</span><span class="chev" aria-hidden="true"></span></summary>' +
+        '<ul class="lines">' + perExp +
+        '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(g.amt)) + ' ريال</span></li>' +
+        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(g.mon)) + ' ريال</span></li>' + perApt + '</ul></details>';
+    }
+    return '<article class="apt"><div class="apt-h"><span class="no">' + ic('person') + '</span>' +
+      '<div><div class="apt-name">' + esc(g.name) + '</div><div class="apt-sub">' + aptsTxt + ' · ' + L(fmtArea(g.area)) + ' م²</div></div>' +
+      '<span class="pct">' + L(pct.toFixed(1) + '%') + '</span></div>' +
+      amtHtml(has, shown, month) +
+      '<div class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></div>' +
+      tagsHtml(g.parking, g.rooms) + more + '</article>';
+  }
+  var groupsMax = 0n;
 
-    var total = sumBig(shown);
+  function renderResult(c) {
+    c = c || compute();
+    var hasArea = c.sumArea > 0n;
+    var has = hasArea && c.exps.length > 0 && c.grand > 0n;
+    var month = state.view === 'month';
+    var groups = ownerGroups(c);
+    groupsMax = groups.reduce(function (m, g) { return g.area > m ? g.area : m; }, 0n);
+
+    var nr = $('#notice-result');
+    if (!hasArea) {
+      nr.className = 'notice';
+      nr.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل ليتم توزيع المصروفات.</p><button class="btn small" type="button" data-go="areas">اكتب المساحات</button>';
+      nr.hidden = false;
+    } else if (!has) {
+      nr.className = 'notice info';
+      nr.innerHTML = '<p>لم تُضف مصروفات بعد. اضغط «إضافة مصروف» وستظهر هنا حصة كل شقة وكل مالك تلقائياً.</p><button class="btn primary small" type="button" data-go="expenses">إضافة مصروف</button>';
+      nr.hidden = false;
+    } else { nr.hidden = true; }
+
+    renderKpis(c, has, groups);
+    renderBars(c, groups, has, month);
+
+    $('#view-seg').hidden = !has;
+    var shownArr = c.unitTotals.map(function (h) { return month ? monthly(h) : h; });
+    $('#units').innerHTML = state.group === 'owner'
+      ? groups.map(function (g, gi) { return ownerCard(c, g, gi, has, month); }).join('')
+      : state.units.map(function (u, i) { return aptCard(c, i, has, month); }).join('');
+
+    var totalbar = $('#totalbar'), check = $('#check');
+    totalbar.hidden = !has; check.hidden = !has;
+    $('#btn-text').closest('.card').hidden = !has;
+    if (!has) return;
+
+    var total = sumBig(shownArr);
     totalbar.innerHTML = '<span>المجموع ' + (month ? 'في الشهر' : 'في السنة') + '</span><span>' + L(fmtScaled(total)) + ' ريال</span>';
+    check.style.color = '';
     if (month) {
       check.className = 'check muted';
       check.textContent = 'المبلغ الشهري هو المبلغ السنوي ÷ 12، مقرَّباً لأقرب هللة.';
@@ -540,42 +760,41 @@ function exact4(num, sum) {
       card.querySelector('[data-o="annual"]').innerHTML = L(fmtScaled(x.total)) + '<small>ريال</small>';
       card.querySelector('[data-o="how"]').innerHTML = howText(x.e);
     });
+    var tb = $('#exp-total');
+    tb.hidden = c.exps.length === 0;
+    tb.innerHTML = '<span>مجموع المصروفات في السنة</span><span>' + L(fmtScaled(c.grand)) + ' ريال</span>';
   }
 
-  /* ---------- المساحات ---------- */
+  /* ---------- الشقق والملاك ---------- */
   function renderAreas() {
-    var rows = '<div class="ahead"><span>الشقة</span><span>المساحة</span></div>' + state.units.map(function (u, i) {
-      return '<div class="arow">' +
-        '<input class="a-name" type="text" id="u-' + i + '-name" data-u="' + i + '" data-k="name" value="' + esc(u.name) + '" aria-label="اسم الشقة رقم ' + (i + 1) + '">' +
-        '<div class="a-field"><input class="n a-area" type="text" inputmode="decimal" autocomplete="off" id="u-' + i + '-area" data-u="' + i + '" data-k="area" value="' + esc(u.area) + '" aria-label="مساحة الشقة رقم ' + (i + 1) + ' بالمتر المربع"><span>متر مربع</span></div></div>';
+    $('#areas').innerHTML = state.units.map(function (u, i) {
+      return '<div class="eu"><div class="eu-h"><span class="no">' + (i + 1) + '</span>' +
+        '<label class="field" for="u-' + i + '-owner"><span class="lab-s">مالك شقة ' + (i + 1) + '</span><input class="a-owner" type="text" id="u-' + i + '-owner" data-u="' + i + '" data-k="owner" autocomplete="off" value="' + esc(u.owner) + '"></label></div>' +
+        '<div class="eu-f"><label class="field" for="u-' + i + '-area"><span class="lab-s">المساحة (م²)</span><input class="n a-area" type="text" inputmode="decimal" autocomplete="off" id="u-' + i + '-area" data-u="' + i + '" data-k="area" value="' + esc(u.area) + '"></label>' +
+        '<label class="field" for="u-' + i + '-parking"><span class="lab-s">عدد المواقف</span><input class="n a-park" type="text" inputmode="numeric" autocomplete="off" id="u-' + i + '-parking" data-u="' + i + '" data-k="parking" data-int="1" value="' + esc(u.parking) + '"></label></div>' +
+        '<label class="room-row" for="u-' + i + '-room"><input type="checkbox" id="u-' + i + '-room" data-u="' + i + '" data-k="room"' + (u.room ? ' checked' : '') + '><span>غرفة سائق في البدروم</span></label></div>';
     }).join('');
-    $('#areas').innerHTML = rows;
     Array.prototype.forEach.call($('#areas').querySelectorAll('input.n'), markValidity);
   }
 
-  function refreshNotices(c) {
-    var nr = $('#notice-result'), na = $('#notice-areas');
-    if (c.sumArea === 0n) {
-      nr.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل ليتم توزيع المصروفات.</p><button class="btn small" type="button" data-go="areas">اكتب المساحات</button>';
-      nr.hidden = false;
-      na.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل.</p>'; na.hidden = false;
-    } else if (state.sampleAreas) {
-      nr.innerHTML = '<p>مساحات الشقق الآن أرقام تجريبية، وليست المساحات الحقيقية.</p><button class="btn small" type="button" data-go="areas">اكتب المساحات الحقيقية</button>';
-      nr.hidden = false;
-      na.innerHTML = '<p>هذه مساحات تجريبية. اكتب المساحة الحقيقية لكل شقة.</p>'; na.hidden = false;
-    } else { nr.hidden = true; na.hidden = true; }
-    $('#area-total').innerHTML = 'إجمالي المساحة: ' + L(fmtArea(c.sumArea)) + ' متر مربع';
+  function refreshAreasInfo(c) {
+    var na = $('#notice-areas');
+    if (c.sumArea === 0n) { na.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل.</p>'; na.hidden = false; } else { na.hidden = true; }
+    var park = state.units.reduce(function (s, u) { return s + parkCount(u); }, 0);
+    var rooms = state.units.reduce(function (s, u) { return s + (u.room ? 1 : 0); }, 0);
+    $('#area-total').innerHTML = '<span>إجمالي المساحة: ' + L(fmtArea(c.sumArea)) + ' م²</span><span>المواقف: ' + L(String(park)) + '</span><span>غرف السائق: ' + L(String(rooms)) + '</span>';
   }
 
   function update() {
     var c = compute();
-    refreshNotices(c);
+    refreshAreasInfo(c);
     updateExpenseCards(c);
     if (tab === 'result') renderResult(c);
     persist();
   }
   function rebuildAll() {
     $('#view-seg').querySelector('input[value="' + state.view + '"]').checked = true;
+    $('#group-seg').querySelector('input[value="' + state.group + '"]').checked = true;
     renderExpenses(); renderAreas(); update();
   }
 
@@ -585,11 +804,15 @@ function exact4(num, sum) {
   });
   TABS.forEach(function (t) { $('#tab-' + t).addEventListener('click', function () { showTab(t); }); });
   $('#units').addEventListener('toggle', function (ev) {
-    var d = ev.target; if (d && d.dataset && d.dataset.i !== undefined) openUnits[d.dataset.i] = d.open;
+    var d = ev.target; if (d && d.dataset && d.dataset.k) openUnits[d.dataset.k] = d.open;
   }, true);
   $('#view-seg').addEventListener('change', function (ev) {
     if (ev.target.name !== 'view') return;
     state.view = ev.target.value; update();
+  });
+  $('#group-seg').addEventListener('change', function (ev) {
+    if (ev.target.name !== 'group') return;
+    state.group = ev.target.value; update();
   });
 
   function onExpenseEvent(ev) {
@@ -630,16 +853,20 @@ function exact4(num, sum) {
     renderExpenses(); update();
     var inp = document.getElementById('exp-' + id + '-name'); if (inp) inp.focus();
   });
-  $('#areas').addEventListener('input', function (ev) {
-    var t = ev.target; if (t.dataset.u === undefined) return;
-    var u = state.units[Number(t.dataset.u)]; if (!u) return;
-    u[t.dataset.k] = t.value;
-    if (t.classList.contains('n')) markValidity(t);
-    if (t.dataset.k === 'area') state.sampleAreas = false;
-    update();
-  });
 
-  var RESET_LABEL = 'البدء من جديد (يمسح كل البيانات)';
+  function onAreaEvent(ev) {
+    var t = ev.target; if (t.dataset.u === undefined) return;
+    var isBox = t.type === 'checkbox';
+    if ((isBox && ev.type !== 'change') || (!isBox && ev.type !== 'input')) return;
+    var u = state.units[Number(t.dataset.u)]; if (!u) return;
+    u[t.dataset.k] = isBox ? t.checked : t.value;
+    if (t.classList.contains('n')) markValidity(t);
+    update();
+  }
+  $('#areas').addEventListener('input', onAreaEvent);
+  $('#areas').addEventListener('change', onAreaEvent);
+
+  var RESET_LABEL = 'إعادة الضبط (يمسح المصروفات)';
   var armTimer = null;
   $('#btn-reset').addEventListener('click', function () {
     var b = this;
@@ -650,33 +877,43 @@ function exact4(num, sum) {
     }
     clearTimeout(armTimer);
     b.classList.remove('armed'); b.textContent = RESET_LABEL;
-    state = sampleState(); openUnits = {}; rebuildAll(); say('تم مسح البيانات والبدء من جديد.');
+    state = sampleState(); openUnits = {}; rebuildAll(); say('تم مسح المصروفات وإعادة بيانات الشقق إلى الأصل.');
   });
 
   /* ---------- المشاركة ---------- */
   function summaryText() {
-    var c = compute(), lines = [];
+    var c = compute(), lines = [], groups = ownerGroups(c);
     lines.push('مصاريف عمارة النهضة المباركة إن شاء الله');
     if (c.exps.length) lines.push('المصروفات: ' + c.exps.map(function (x) { return expName(x.e); }).join('، '));
     lines.push('الإجمالي: ' + fmtScaled(c.grand) + ' ريال في السنة (حوالي ' + fmtScaled(monthly(c.grand)) + ' في الشهر)');
     lines.push('');
     state.units.forEach(function (u, i) {
-      lines.push(unitLabel(u, i) + ' (' + fmtArea(c.areas[i]) + ' م²): ' + fmtScaled(c.unitTotals[i]) + ' ريال في السنة، ' + fmtScaled(monthly(c.unitTotals[i])) + ' في الشهر');
+      lines.push(unitLabel(i) + ' - ' + ownerOf(u, i) + ' (' + fmtArea(c.areas[i]) + ' م²): ' + fmtScaled(c.unitTotals[i]) + ' ريال في السنة، ' + fmtScaled(monthly(c.unitTotals[i])) + ' في الشهر');
     });
     lines.push('');
     lines.push('المجموع: ' + fmtScaled(sumBig(c.unitTotals)) + ' ريال في السنة');
+    var multi = groups.filter(function (g) { return g.idx.length > 1; });
+    if (multi.length) {
+      lines.push('');
+      lines.push('حسب المالك (أكثر من شقة):');
+      multi.forEach(function (g) {
+        lines.push(g.name + ' (شقق ' + g.idx.map(function (i) { return i + 1; }).join('، ') + '): ' + fmtScaled(g.amt) + ' ريال في السنة، ' + fmtScaled(g.mon) + ' في الشهر');
+      });
+    }
     return lines.join('\n');
   }
   function tableRows() {
     var c = compute();
-    var head = ['الشقة', 'المساحة (م2)', 'النسبة (%)'].concat(c.exps.map(function (x) { return expName(x.e) + ' (ريال/سنة)'; }), ['الإجمالي السنوي (ريال)', 'شهرياً (ريال)']);
+    var head = ['الشقة', 'المالك', 'المساحة (م2)', 'النسبة (%)'].concat(c.exps.map(function (x) { return expName(x.e) + ' (ريال/سنة)'; }), ['الإجمالي السنوي (ريال)', 'شهرياً (ريال)', 'المواقف', 'غرفة سائق']);
     var hasArea = c.sumArea > 0n;
     var rows = state.units.map(function (u, i) {
       var pct = hasArea ? (Number(c.areas[i]) / Number(c.sumArea) * 100).toFixed(2) : '0.00';
-      return [unitLabel(u, i), fmtScaled(c.areas[i], 2, false), pct].concat(c.exps.map(function (x) { return fmtScaled(x.shares[i], 2, false); }), [fmtScaled(c.unitTotals[i], 2, false), fmtScaled(monthly(c.unitTotals[i]), 2, false)]);
+      return [unitLabel(i), ownerOf(u, i), fmtScaled(c.areas[i], 2, false), pct].concat(c.exps.map(function (x) { return fmtScaled(x.shares[i], 2, false); }), [fmtScaled(c.unitTotals[i], 2, false), fmtScaled(monthly(c.unitTotals[i]), 2, false), String(parkCount(u)), u.room ? 'نعم' : 'لا']);
     });
     var monthSum = c.unitTotals.reduce(function (s, h) { return s + monthly(h); }, 0n);
-    rows.push(['الإجمالي', fmtScaled(c.sumArea, 2, false), hasArea ? '100.00' : '0.00'].concat(c.exps.map(function (x) { return fmtScaled(sumBig(x.shares), 2, false); }), [fmtScaled(sumBig(c.unitTotals), 2, false), fmtScaled(monthSum, 2, false)]));
+    var park = state.units.reduce(function (s, u) { return s + parkCount(u); }, 0);
+    var rooms = state.units.reduce(function (s, u) { return s + (u.room ? 1 : 0); }, 0);
+    rows.push(['الإجمالي', '', fmtScaled(c.sumArea, 2, false), hasArea ? '100.00' : '0.00'].concat(c.exps.map(function (x) { return fmtScaled(sumBig(x.shares), 2, false); }), [fmtScaled(sumBig(c.unitTotals), 2, false), fmtScaled(monthSum, 2, false), String(park), String(rooms)]));
     return [head].concat(rows);
   }
   function csvCell(v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
@@ -712,7 +949,7 @@ function exact4(num, sum) {
   });
 
   rebuildAll();
-  showTab(state.expenses.length ? 'result' : 'expenses');
+  showTab('result');
 })();
 </script>
 </body>
