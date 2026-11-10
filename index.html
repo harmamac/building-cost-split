@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="يوزّع مصروفات عمارة النهضة المباركة على 14 شقة بحسب المساحة، مع تقريب دقيق وشرح خطوات الحساب.">
+<meta name="description" content="يوزّع مصروفات عمارة النهضة المباركة على 14 شقة بحسب المساحة، مع تكلفة غرف السائق (10 ريال للمتر شهرياً) وتقريب دقيق وشرح خطوات الحساب.">
 <title>مصاريف عمارة النهضة المباركة إن شاء الله</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap">
@@ -122,7 +122,6 @@ svg.ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-wid
 .kpi.primary .k-top .ic { color: var(--gold-light); }
 .kpi.primary .k-v { color: #FFFDF6; font-size: 2.7rem; }
 .kpi.primary .k-v small { color: var(--gold-light); font-size: 1.2rem; }
-.kpi.primary .k-s { color: #E3EEE8; font-size: 1.02rem; }
 .kpi.primary :focus-visible { outline-color: #fff; }
 
 /* الرسم: حصة كل مالك */
@@ -184,6 +183,12 @@ details.more[open] .chev { transform: rotate(225deg); margin-block: 4px 0; }
 .lines li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
 .lines li.sum { font-weight: 700; border-bottom: 0; }
 .lines li.sub { color: var(--ink-2); font-size: .95rem; }
+.kpi.primary .k-cats { grid-column: 1 / -1; margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(232, 203, 124, .35); }
+.kpi.primary .k-catrow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 7px 0; border-bottom: 1px solid rgba(232, 203, 124, .16); }
+.kpi.primary .k-catrow:last-child { border-bottom: 0; }
+.kpi.primary .k-catn { font-weight: 700; color: #FFFDF6; font-size: 1rem; }
+.kpi.primary .k-catv { color: #E3EEE8; font-weight: 600; font-size: .98rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.kpi.primary .k-catv small { color: var(--gold-light); font-weight: 600; font-size: .9rem; margin-inline: 6px; }
 .note-s { color: var(--ink-2); font-size: .92rem; line-height: 1.7; padding-top: 6px; }
 .totalbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 18px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 16px; font-weight: 700; font-size: 1.25rem; color: var(--accent); }
 .check { font-weight: 600; }
@@ -215,10 +220,6 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 .eu-h { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: end; }
 .eu-h .no { margin-bottom: 5px; }
 .eu-f { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 10px; }
-.room-row { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 6px 12px; border-radius: 14px; border: 2px solid var(--line); cursor: pointer; font-weight: 600; background: var(--surface); }
-.room-row:hover { border-color: var(--accent-2); }
-.room-row input { width: 26px; height: 26px; accent-color: var(--accent); margin: 0; flex: none; }
-.room-row:has(input:checked) { background: var(--gold-pale); border-color: var(--gold); color: var(--gold-ink); }
 .total-line { margin-top: 14px; padding: 14px 16px; background: var(--accent-soft); border: 1px solid #C4DCD0; border-radius: 14px; font-weight: 700; font-size: 1.1rem; color: var(--accent); display: flex; flex-wrap: wrap; gap: 4px 22px; }
 
 .foot-row { display: flex; flex-wrap: wrap; justify-content: center; padding-top: 8px; }
@@ -234,10 +235,7 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
 }
 @media (min-width: 900px) {
   .kpis { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .kpi.primary { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 36px; padding: 24px 30px; }
-  .kpi.primary .k-top { grid-column: 1; }
-  .kpi.primary .k-v { grid-column: 1; }
-  .kpi.primary .k-s { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-size: 1.1rem; max-width: 34em; }
+  .kpi.primary { padding: 24px 30px; }
   .mid { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; }
   .pair-2 { grid-template-columns: 1fr 1fr; align-items: start; }
 }
@@ -286,9 +284,10 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
           <li><span>نجمع مساحات الشقق كلها.</span></li>
           <li><span>نحسب نسبة كل شقة من المجموع: مساحتها ÷ مجموع المساحات.</span></li>
           <li><span>تدفع كل شقة هذه النسبة من كل مصروف.</span></li>
+          <li><span>غرفة السائق تُحسب تكلفتها منفصلة: 10 ريال × مساحتها كل شهر، يدفعها مالك الشقة.</span></li>
         </ol>
-        <p class="foot">المبالغ محسوبة بالهللة، ومجموعها يساوي إجمالي المصروفات تماماً دون زيادة أو نقص.</p>
-        <p class="side">مواقف السيارات وغرف السائق مسجّلة هنا للمعرفة فقط. لا تدخل في الحساب حتى تُحدَّد طريقة احتساب تكلفتها.</p>
+        <p class="foot">المبالغ محسوبة بالهللة، ومجموع ما تدفعه الشقق يساوي إجمالي المصروفات وتكاليف الغرف تماماً دون زيادة أو نقص.</p>
+        <p class="side">مواقف السيارات مسجّلة هنا للمعرفة فقط ولا تدخل في الحساب. مساحة غرفة السائق لا تدخل في تقسيم المصروفات؛ بل تُحسب تكلفتها ثابتة: 10 ريال للمتر شهرياً يدفعها مالك الشقة.</p>
       </section>
     </div>
     <div id="result-body" class="dash">
@@ -333,7 +332,7 @@ input[aria-invalid="true"] { border-color: var(--bad); background: #FDF1F0; }
   <!-- الشقق والملاك -->
   <section id="panel-areas" role="tabpanel" aria-labelledby="tab-areas" class="dash" hidden>
     <div class="notice" id="notice-areas" hidden></div>
-    <p class="muted">لكل شقة: اسم المالك، والمساحة بالمتر المربع، وعدد المواقف، وهل لصاحبها غرفة سائق في البدروم.</p>
+    <p class="muted">لكل شقة: اسم المالك، والمساحة بالمتر المربع، وعدد المواقف، وبيانات غرفة السائق (اسم السائق ومساحة الغرفة بالمتر المربع). تكلفة الغرفة ثابتة: 10 ريال لكل متر شهرياً يدفعها مالك الشقة.</p>
     <div class="edit-grid" id="areas"></div>
     <div class="total-line" id="area-total"></div>
   </section>
@@ -415,24 +414,25 @@ function exact4(num, sum) {
 //#core-end
 
 (function () {
-  var KEY = 'building-cost-split:v5-ar';
+  var KEY = 'building-cost-split:v6-ar';
+  var KEY_V5 = 'building-cost-split:v5-ar';
   var N_UNITS = 14;
-  /* المالك، المساحة، عدد المواقف، غرفة سائق (1 = نعم) */
+  /* المالك، المساحة، عدد المواقف، مساحة غرفة السائق (م²)، اسم السائق */
   var DEF = [
-    ['نايف', '167', 0, 0],
-    ['الوالد', '167', 0, 0],
-    ['عبدالله', '167', 0, 0],
-    ['حسين', '167', 1, 1],
-    ['خالد', '167', 1, 0],
-    ['الوالد', '167', 0, 1],
-    ['عبد الرحمن', '167', 0, 0],
-    ['ممدوح', '250', 3, 1],
-    ['فيصل', '250', 1, 1],
-    ['الوالد', '250', 0, 0],
-    ['عبد العزيز', '250', 2, 1],
-    ['أحمد', '250', 0, 0],
-    ['محمد', '250', 2, 1],
-    ['الوالد', '400', 0, 0]
+    ['نايف', '167', 0, '', ''],
+    ['الوالد', '167', 0, '', ''],
+    ['عبدالله', '167', 0, '', ''],
+    ['حسين', '167', 1, '13.63', 'سوينو'],
+    ['خالد', '167', 1, '', ''],
+    ['الوالد', '167', 0, '10.60', 'أيوب'],
+    ['عبد الرحمن', '167', 0, '', ''],
+    ['ممدوح', '250', 3, '7.77', 'حنيفة'],
+    ['فيصل', '250', 1, '36.30', 'أنور'],
+    ['الوالد', '250', 0, '', ''],
+    ['عبد العزيز', '250', 2, '7.56', 'نور'],
+    ['أحمد', '250', 0, '', ''],
+    ['محمد', '250', 2, '7.57', 'كيت'],
+    ['الوالد', '400', 0, '', '']
   ];
   var TABS = ['result', 'expenses', 'areas'];
 
@@ -457,17 +457,36 @@ function exact4(num, sum) {
   function unitLabel(i) { return 'شقة ' + (i + 1); }
   function sumBig(arr) { return arr.reduce(function (a, b) { return a + b; }, 0n); }
   function monthly(h) { return (h + 6n) / 12n; }
+  /* تجميع المصروفات حسب الاسم نفسه: كل اسم مصروف = تصنيف مستقل في القائمة */
+  function expGroups(c) {
+    var map = {}, order = [];
+    c.exps.forEach(function (x) {
+      var k = expName(x.e);
+      if (!map[k]) { map[k] = { name: k, tot: 0n, count: 0 }; order.push(k); }
+      map[k].tot += x.total; map[k].count += 1;
+    });
+    order.sort(function (a, b) { return map[a].tot !== map[b].tot ? (map[a].tot > map[b].tot ? -1 : 1) : 0; });
+    return order.map(function (k) { return map[k]; });
+  }
   function isValidInt(v) { var s = normDigits(v); return s === '' || /^\d{1,2}$/.test(s); }
   function parkCount(u) { var s = normDigits(u.parking); return /^\d+$/.test(s) ? Math.min(99, parseInt(s, 10)) : 0; }
   function ownerOf(u, i) { return String(u.owner || '').trim() || unitLabel(i); }
   function parkWord(n) { return n === 1 ? 'موقف' : n === 2 ? 'موقفان' : n + ' مواقف'; }
-  function roomWord(n) { return n === 1 ? 'غرفة سائق' : n === 2 ? 'غرفتا سائق' : n + ' غرف سائق'; }
   function flatRows(arr) { return arr; }
 
   function defaultUnits() {
-    return DEF.map(function (d) { return { owner: d[0], area: d[1], parking: String(d[2]), room: !!d[3] }; });
+    return DEF.map(function (d) { return { owner: d[0], area: d[1], parking: String(d[2]), roomArea: String(d[3]), driver: String(d[4]) }; });
   }
   function sampleState() { return { view: 'year', group: 'apt', units: defaultUnits(), expenses: [] }; }
+  function parseExpenses(s) {
+    return s.expenses.map(function (e, i) {
+      return {
+        id: Number(e.id) || i + 1, name: String(e.name || ''), mode: e.mode === 'lump' ? 'lump' : 'qty',
+        qty: String(e.qty == null ? '' : e.qty), unit: String(e.unit == null ? '' : e.unit), lump: String(e.lump == null ? '' : e.lump),
+        per: e.per === 'month' ? 'month' : 'year'
+      };
+    });
+  }
   function parseState(raw) {
     try {
       var s = JSON.parse(raw);
@@ -475,22 +494,33 @@ function exact4(num, sum) {
       return {
         view: s.view === 'month' ? 'month' : 'year', group: s.group === 'owner' ? 'owner' : 'apt',
         units: s.units.map(function (u, i) {
-          return { owner: String(u.owner == null ? DEF[i][0] : u.owner), area: String(u.area == null ? '' : u.area), parking: String(u.parking == null ? '0' : u.parking), room: !!u.room };
+          return { owner: String(u.owner == null ? DEF[i][0] : u.owner), area: String(u.area == null ? '' : u.area), parking: String(u.parking == null ? '0' : u.parking), roomArea: String(u.roomArea == null ? '' : u.roomArea), driver: String(u.driver == null ? '' : u.driver) };
         }),
-        expenses: s.expenses.map(function (e, i) {
-          return {
-            id: Number(e.id) || i + 1, name: String(e.name || ''), mode: e.mode === 'lump' ? 'lump' : 'qty',
-            qty: String(e.qty == null ? '' : e.qty), unit: String(e.unit == null ? '' : e.unit), lump: String(e.lump == null ? '' : e.lump),
-            per: e.per === 'month' ? 'month' : 'year'
-          };
-        })
+        expenses: parseExpenses(s)
+      };
+    } catch (err) { return null; }
+  }
+  /* ترحيل الحالة القديمة (v5): غرفة السائق كانت نعم/لا، فنأخذ مساحة الغرفة واسم السائق من البيانات الأصلية */
+  function migrateV5(raw) {
+    try {
+      var s = JSON.parse(raw);
+      if (!s || !Array.isArray(s.units) || s.units.length !== N_UNITS || !Array.isArray(s.expenses)) return null;
+      return {
+        view: s.view === 'month' ? 'month' : 'year', group: s.group === 'owner' ? 'owner' : 'apt',
+        units: s.units.map(function (u, i) {
+          return { owner: String(u.owner == null ? DEF[i][0] : u.owner), area: String(u.area == null ? '' : u.area), parking: String(u.parking == null ? '0' : u.parking), roomArea: u.room ? DEF[i][3] : '', driver: u.room ? DEF[i][4] : '' };
+        }),
+        expenses: parseExpenses(s)
       };
     } catch (err) { return null; }
   }
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
-      return raw ? parseState(raw) : null;
+      if (raw) return parseState(raw);
+      var raw5 = localStorage.getItem(KEY_V5);
+      if (raw5) return migrateV5(raw5);
+      return null;
     } catch (err) { return null; }
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (err) { /* التخزين غير متاح */ } }
@@ -536,17 +566,26 @@ function exact4(num, sum) {
     });
     var unitTotals = areas.map(function (_, i) { return exps.reduce(function (s, x) { return s + x.shares[i]; }, 0n); });
     var grand = exps.reduce(function (s, x) { return s + x.total; }, 0n);
-    return { areas: areas, sumArea: sumArea, exps: exps, unitTotals: unitTotals, grand: grand };
+    /* غرف السائق: تكلفة ثابتة 10 ريال للمتر شهرياً يدفعها مالك الشقة (المساحة بمقياس الهللة × 10 ريال) */
+    var roomMon = state.units.map(function (u) { return parseScaled(u.roomArea, 2) * 10n; });
+    var roomAnn = roomMon.map(function (m) { return m * 12n; });
+    var sumRoomMon = sumBig(roomMon);
+    var sumRoomAnn = sumBig(roomAnn);
+    var payAnn = unitTotals.map(function (t, i) { return t + roomAnn[i]; });
+    var payMon = unitTotals.map(function (t, i) { return monthly(t) + roomMon[i]; });
+    return { areas: areas, sumArea: sumArea, exps: exps, unitTotals: unitTotals, grand: grand, roomMon: roomMon, roomAnn: roomAnn, sumRoomMon: sumRoomMon, sumRoomAnn: sumRoomAnn, payAnn: payAnn, payMon: payMon };
   }
   /* تجميع الشقق حسب المالك (الاسم نفسه = مالك واحد) */
   function ownerGroups(c) {
     var map = {}, order = [];
     state.units.forEach(function (u, i) {
       var key = ownerOf(u, i);
-      if (!map[key]) { map[key] = { name: key, idx: [], area: 0n, amt: 0n, mon: 0n, parking: 0, rooms: 0 }; order.push(key); }
+      if (!map[key]) { map[key] = { name: key, idx: [], area: 0n, amt: 0n, mon: 0n, payA: 0n, payM: 0n, roomMon: 0n, roomAnn: 0n, parking: 0, rooms: 0, drivers: [] }; order.push(key); }
       var g = map[key];
       g.idx.push(i); g.area += c.areas[i]; g.amt += c.unitTotals[i]; g.mon += monthly(c.unitTotals[i]);
-      g.parking += parkCount(u); g.rooms += u.room ? 1 : 0;
+      g.payA += c.payAnn[i]; g.payM += c.payMon[i]; g.roomMon += c.roomMon[i]; g.roomAnn += c.roomAnn[i];
+      g.parking += parkCount(u);
+      if (c.roomAnn[i] > 0n) { g.rooms += 1; g.drivers.push({ i: i, name: String(u.driver || '').trim() }); }
     });
     return order.map(function (k) { return map[k]; });
   }
@@ -567,21 +606,23 @@ function exact4(num, sum) {
     return '<div class="kpi"><div class="k-top">' + ic(icon) + '<span>' + label + '</span></div>' +
       '<div class="k-v">' + val + (unit ? '<small>' + unit + '</small>' : '') + '</div><div class="k-s">' + sub + '</div></div>';
   }
-  function renderKpis(c, has, groups) {
+  function renderKpis(c, hasExp, hasRooms, groups) {
     var park = state.units.reduce(function (s, u) { return s + parkCount(u); }, 0);
-    var rooms = state.units.reduce(function (s, u) { return s + (u.room ? 1 : 0); }, 0);
+    var rooms = c.roomAnn.filter(function (m) { return m > 0n; }).length;
     var multi = groups.filter(function (g) { return g.idx.length > 1; }).map(function (g) { return esc(g.name) + ' (' + g.idx.length + ' شقق)'; }).join('، ');
+    var rows = hasExp ? expGroups(c).map(function (g) {
+      var pct = Number(g.tot) / Number(c.grand) * 100;
+      return '<div class="k-catrow"><span class="k-catn">' + esc(g.name) + '</span><span class="k-catv">' + L(fmtScaled(g.tot)) + ' ريال<small>' + L(pct.toFixed(1) + '%') + '</small>· ' + L(fmtScaled(monthly(g.tot))) + ' في الشهر</span></div>';
+    }).join('') : '';
     var primary = '<div class="kpi primary"><div class="k-top">' + ic('money') + '<span>مصروفات العمارة في السنة</span></div>' +
       '<div class="k-v">' + L(fmtScaled(c.grand)) + '<small>ريال</small></div>' +
-      '<div class="k-s">' + (has
-        ? 'أي حوالي ' + L(fmtScaled(monthly(c.grand))) + ' ريال في الشهر. تُقسَّم على ' + N_UNITS + ' شقة بحسب المساحة، فكلما كبرت الشقة زاد ما تدفعه.'
-        : 'لم تُضف مصروفات بعد. أضف أول مصروف وستظهر الأرقام هنا.') + '</div></div>';
+      (rows ? '<div class="k-cats">' + rows + '</div>' : '') + '</div>';
     $('#kpis').innerHTML = primary +
       tile('apt', 'الشقق', N_UNITS, '', 'في العمارة') +
       tile('owners', 'الملاك', groups.length, '', multi || 'مالك') +
-      tile('area', 'إجمالي المساحة', L(fmtArea(c.sumArea)), 'م²', 'مساحة الشقق') +
+      tile('area', 'إجمالي المساحة', L(fmtArea(c.sumArea)), 'م²', 'مساحة الشقق فقط') +
       tile('parking', 'مواقف السيارات', park, '', 'تكلفتها تُحسب لاحقاً') +
-      tile('room', 'غرف السائق', rooms, '', 'في البدروم') +
+      tile('room', 'غرف السائق', rooms, '', hasRooms ? L(fmtScaled(c.sumRoomMon)) + ' ريال/شهر' : '10 ريال للمتر شهرياً') +
       tile('list', 'بنود المصروفات', c.exps.length, '', c.exps.length ? 'مسجّلة' : 'لا يوجد بعد');
   }
   function renderBars(c, groups, has, month) {
@@ -590,14 +631,14 @@ function exact4(num, sum) {
       return a.k - b.k;
     }).map(function (x) { return x.g; });
     var maxArea = sorted.reduce(function (m, g) { return g.area > m ? g.area : m; }, 0n);
-    $('#chart-sub').textContent = has ? 'المبلغ ' + (month ? 'الشهري' : 'السنوي') + ' ونسبة المساحة لكل مالك' : 'نسبة مساحة شقق كل مالك من العمارة';
+    $('#chart-sub').textContent = has ? 'المبلغ ' + (month ? 'الشهري' : 'السنوي') + ' (يشمل تكاليف غرف السائق) ونسبة المساحة لكل مالك' : 'نسبة مساحة شقق كل مالك من العمارة';
     if (c.sumArea === 0n) { $('#obars').innerHTML = '<p class="empty">اكتب مساحات الشقق لتظهر الحصص.</p>'; return; }
     $('#obars').innerHTML = sorted.map(function (g) {
       var pct = Number(g.area) / Number(c.sumArea) * 100;
       var w = Math.max(3, Number(g.area) / Number(maxArea) * 100);
       var sub = g.idx.length > 1 ? g.idx.length + ' شقق' : 'شقة ' + (g.idx[0] + 1);
       var val = has
-        ? L(fmtScaled(month ? g.mon : g.amt)) + '<small>' + L(pct.toFixed(1) + '%') + '</small>'
+        ? L(fmtScaled(month ? g.payM : g.payA)) + '<small>' + L(pct.toFixed(1) + '%') + '</small>'
         : L(pct.toFixed(1) + '%');
       return '<div class="ob" title="' + esc(g.name) + ': ' + pct.toFixed(1) + '% من مساحة العمارة">' +
         '<div class="ob-name">' + esc(g.name) + '<small>' + sub + '</small></div>' +
@@ -605,10 +646,10 @@ function exact4(num, sum) {
         '<div class="ob-val">' + val + '</div></div>';
     }).join('');
   }
-  function tagsHtml(park, rooms) {
+  function tagsHtml(park, room) {
     var t = '';
     if (park > 0) t += '<span class="tag">' + ic('parking') + parkWord(park) + '</span>';
-    if (rooms > 0) t += '<span class="tag room">' + ic('room') + roomWord(rooms) + '</span>';
+    if (room) t += '<span class="tag room">' + ic('room') + 'غرفة سائق' + (room.name ? ' · ' + esc(room.name) : '') + ' · ' + L(fmtScaled(room.mon)) + ' ريال/شهر</span>';
     return t ? '<div class="tags">' + t + '</div>' : '';
   }
   function amtHtml(has, val, month) {
@@ -621,30 +662,37 @@ function exact4(num, sum) {
     var pct = c.sumArea > 0n ? Number(c.areas[i]) / Number(c.sumArea) * 100 : 0;
     var maxArea = c.areas.reduce(function (a, b) { return b > a ? b : a; }, 0n);
     var bar = maxArea > 0n ? Math.max(3, Number(c.areas[i]) / Number(maxArea) * 100) : 0;
-    var shown = month ? monthly(c.unitTotals[i]) : c.unitTotals[i];
+    var shown = month ? c.payMon[i] : c.payAnn[i];
+    var drv = String(u.driver || '').trim();
     var more = '';
     if (has) {
       var lines = c.exps.map(function (x) {
         return '<li><span>' + esc(expName(x.e)) + '</span><span><b>' + L(fmtScaled(x.shares[i])) + '</b> ريال</span></li>';
       }).join('');
+      if (c.roomAnn[i] > 0n) {
+        lines += '<li><span>غرفة السائق' + (drv ? ' (' + esc(drv) + ')' : '') + ' · 10 ريال × ' + L(fmtArea(parseScaled(u.roomArea, 2))) + ' م² شهرياً</span><span><b>' + L(fmtScaled(c.roomAnn[i])) + '</b> ريال في السنة</span></li>';
+      }
+      var notes = [];
+      if (c.grand > 0n) notes.push('مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في العمارة، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.');
+      if (c.roomAnn[i] > 0n) notes.push('غرفة السائق تُدفع بتكلفة ثابتة: ' + L(fmtScaled(c.roomMon[i])) + ' ريال شهرياً (' + L(fmtScaled(c.roomAnn[i])) + ' ريال في السنة).');
       more = '<details class="more" data-k="a' + i + '"' + (openUnits['a' + i] ? ' open' : '') + '><summary><span>تفاصيل الحساب</span><span class="chev" aria-hidden="true"></span></summary>' +
-        '<p class="note-s">مساحة هذه الشقة ' + L(fmtArea(c.areas[i])) + ' متر مربع من أصل ' + L(fmtArea(c.sumArea)) + ' متر مربع في العمارة، أي نحو ' + L(pct.toFixed(1) + '%') + '. لذلك تدفع نحو ' + L(pct.toFixed(1) + '%') + ' من كل مصروف.</p>' +
+        (notes.length ? '<p class="note-s">' + notes.join(' ') + '</p>' : '') +
         '<ul class="lines">' + lines +
-        '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(c.unitTotals[i])) + ' ريال</span></li>' +
-        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(monthly(c.unitTotals[i]))) + ' ريال</span></li></ul></details>';
+        '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(c.payAnn[i])) + ' ريال</span></li>' +
+        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(c.payMon[i])) + ' ريال</span></li></ul></details>';
     }
     return '<article class="apt"><div class="apt-h"><span class="no">' + (i + 1) + '</span>' +
       '<div><div class="apt-name">' + esc(ownerOf(u, i)) + '</div><div class="apt-sub">' + unitLabel(i) + ' · ' + L(fmtArea(c.areas[i])) + ' م²</div></div>' +
       '<span class="pct">' + L(pct.toFixed(1) + '%') + '</span></div>' +
       amtHtml(has, shown, month) +
       '<div class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></div>' +
-      tagsHtml(parkCount(u), u.room ? 1 : 0) + more + '</article>';
+      tagsHtml(parkCount(u), c.roomAnn[i] > 0n ? { name: drv, mon: c.roomMon[i] } : null) + more + '</article>';
   }
   function ownerCard(c, g, gi, has, month) {
     var pct = c.sumArea > 0n ? Number(g.area) / Number(c.sumArea) * 100 : 0;
     var maxArea = groupsMax;
     var bar = maxArea > 0n ? Math.max(3, Number(g.area) / Number(maxArea) * 100) : 0;
-    var shown = month ? g.mon : g.amt;
+    var shown = month ? g.payM : g.payA;
     var aptsTxt = g.idx.length > 1 ? 'شقق ' + g.idx.map(function (i) { return i + 1; }).join('، ') : unitLabel(g.idx[0]);
     var more = '';
     if (has) {
@@ -652,27 +700,32 @@ function exact4(num, sum) {
         var s = g.idx.reduce(function (a, i) { return a + x.shares[i]; }, 0n);
         return '<li><span>' + esc(expName(x.e)) + '</span><span><b>' + L(fmtScaled(s)) + '</b> ريال</span></li>';
       }).join('');
+      var perRoom = g.drivers.map(function (d) {
+        return '<li><span>غرفة السائق — ' + unitLabel(d.i) + (d.name ? ' (' + esc(d.name) + ')' : '') + '</span><span><b>' + L(fmtScaled(c.roomAnn[d.i])) + '</b> ريال في السنة</span></li>';
+      }).join('');
       var perApt = g.idx.length > 1 ? g.idx.map(function (i) {
-        return '<li class="sub"><span>' + unitLabel(i) + '</span><span>' + L(fmtScaled(c.unitTotals[i])) + ' ريال في السنة</span></li>';
+        return '<li class="sub"><span>' + unitLabel(i) + '</span><span>' + L(fmtScaled(c.payAnn[i])) + ' ريال في السنة</span></li>';
       }).join('') : '';
       more = '<details class="more" data-k="o' + gi + '"' + (openUnits['o' + gi] ? ' open' : '') + '><summary><span>تفاصيل الحساب</span><span class="chev" aria-hidden="true"></span></summary>' +
-        '<ul class="lines">' + perExp +
-        '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(g.amt)) + ' ريال</span></li>' +
-        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(g.mon)) + ' ريال</span></li>' + perApt + '</ul></details>';
+        '<ul class="lines">' + perExp + perRoom +
+        '<li class="sum"><span>المجموع في السنة</span><span>' + L(fmtScaled(g.payA)) + ' ريال</span></li>' +
+        '<li class="sum"><span>أي في الشهر</span><span>' + L(fmtScaled(g.payM)) + ' ريال</span></li>' + perApt + '</ul></details>';
     }
     return '<article class="apt"><div class="apt-h"><span class="no">' + ic('person') + '</span>' +
       '<div><div class="apt-name">' + esc(g.name) + '</div><div class="apt-sub">' + aptsTxt + ' · ' + L(fmtArea(g.area)) + ' م²</div></div>' +
       '<span class="pct">' + L(pct.toFixed(1) + '%') + '</span></div>' +
       amtHtml(has, shown, month) +
       '<div class="u-bar" aria-hidden="true"><i style="width:' + bar.toFixed(1) + '%"></i></div>' +
-      tagsHtml(g.parking, g.rooms) + more + '</article>';
+      tagsHtml(g.parking, g.rooms ? { name: g.drivers.map(function (d) { return d.name; }).filter(Boolean).join('، ') || null, mon: g.roomMon } : null) + more + '</article>';
   }
   var groupsMax = 0n;
 
   function renderResult(c) {
     c = c || compute();
     var hasArea = c.sumArea > 0n;
-    var has = hasArea && c.exps.length > 0 && c.grand > 0n;
+    var hasExp = c.exps.length > 0 && c.grand > 0n;
+    var hasRooms = c.sumRoomAnn > 0n;
+    var has = hasArea && (hasExp || hasRooms);
     var month = state.view === 'month';
     var groups = ownerGroups(c);
     groupsMax = groups.reduce(function (m, g) { return g.area > m ? g.area : m; }, 0n);
@@ -682,17 +735,21 @@ function exact4(num, sum) {
       nr.className = 'notice';
       nr.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل ليتم توزيع المصروفات.</p><button class="btn small" type="button" data-go="areas">اكتب المساحات</button>';
       nr.hidden = false;
-    } else if (!has) {
+    } else if (!hasExp && !hasRooms) {
       nr.className = 'notice info';
       nr.innerHTML = '<p>لم تُضف مصروفات بعد. اضغط «إضافة مصروف» وستظهر هنا حصة كل شقة وكل مالك تلقائياً.</p><button class="btn primary small" type="button" data-go="expenses">إضافة مصروف</button>';
       nr.hidden = false;
+    } else if (!hasExp) {
+      nr.className = 'notice info';
+      nr.innerHTML = '<p>لم تُضف مصروفات بعد. تظهر الآن تكاليف غرف السائق فقط (10 ريال للمتر شهرياً). اضغط «إضافة مصروف» وستظهر حصة كل شقة.</p><button class="btn primary small" type="button" data-go="expenses">إضافة مصروف</button>';
+      nr.hidden = false;
     } else { nr.hidden = true; }
 
-    renderKpis(c, has, groups);
+    renderKpis(c, hasExp, hasRooms, groups);
     renderBars(c, groups, has, month);
 
     $('#view-seg').hidden = !has;
-    var shownArr = c.unitTotals.map(function (h) { return month ? monthly(h) : h; });
+    var shownArr = month ? c.payMon : c.payAnn;
     $('#units').innerHTML = state.group === 'owner'
       ? groups.map(function (g, gi) { return ownerCard(c, g, gi, has, month); }).join('')
       : state.units.map(function (u, i) { return aptCard(c, i, has, month); }).join('');
@@ -707,10 +764,10 @@ function exact4(num, sum) {
     check.style.color = '';
     if (month) {
       check.className = 'check muted';
-      check.textContent = 'المبلغ الشهري هو المبلغ السنوي ÷ 12، مقرَّباً لأقرب هللة.';
-    } else if (total === c.grand) {
+      check.textContent = 'المبلغ الشهري = (المصروفات السنوية ÷ 12 مقرَّباً لأقرب هللة) + تكلفة غرف السائق الشهرية.';
+    } else if (total === c.grand + c.sumRoomAnn) {
       check.className = 'check ok';
-      check.textContent = '✓ مجموع ما تدفعه الشقق يساوي مصروفات العمارة تماماً.';
+      check.textContent = '✓ مجموع ما تدفعه الشقق يساوي مصروفات العمارة وتكاليف غرف السائق تماماً.';
     } else {
       check.className = 'check';
       check.style.color = 'var(--bad)';
@@ -772,22 +829,37 @@ function exact4(num, sum) {
         '<label class="field" for="u-' + i + '-owner"><span class="lab-s">مالك شقة ' + (i + 1) + '</span><input class="a-owner" type="text" id="u-' + i + '-owner" data-u="' + i + '" data-k="owner" autocomplete="off" value="' + esc(u.owner) + '"></label></div>' +
         '<div class="eu-f"><label class="field" for="u-' + i + '-area"><span class="lab-s">المساحة (م²)</span><input class="n a-area" type="text" inputmode="decimal" autocomplete="off" id="u-' + i + '-area" data-u="' + i + '" data-k="area" value="' + esc(u.area) + '"></label>' +
         '<label class="field" for="u-' + i + '-parking"><span class="lab-s">عدد المواقف</span><input class="n a-park" type="text" inputmode="numeric" autocomplete="off" id="u-' + i + '-parking" data-u="' + i + '" data-k="parking" data-int="1" value="' + esc(u.parking) + '"></label></div>' +
-        '<label class="room-row" for="u-' + i + '-room"><input type="checkbox" id="u-' + i + '-room" data-u="' + i + '" data-k="room"' + (u.room ? ' checked' : '') + '><span>غرفة سائق في البدروم</span></label></div>';
+        '<div class="eu-f"><label class="field" for="u-' + i + '-driver"><span class="lab-s">اسم السائق</span><input class="a-driver" type="text" id="u-' + i + '-driver" data-u="' + i + '" data-k="driver" autocomplete="off" value="' + esc(u.driver) + '" placeholder="بلا غرفة سائق"></label>' +
+        '<label class="field" for="u-' + i + '-room"><span class="lab-s">مساحة غرفة السائق (م²)</span><input class="n a-room" type="text" inputmode="decimal" autocomplete="off" id="u-' + i + '-room" data-u="' + i + '" data-k="roomArea" value="' + esc(u.roomArea) + '" placeholder="0"></label></div>' +
+        '<p class="lab-s muted" data-rcost="' + i + '"></p></div>';
     }).join('');
     Array.prototype.forEach.call($('#areas').querySelectorAll('input.n'), markValidity);
+    updateRoomCostLabels();
+  }
+
+  function updateRoomCostLabels() {
+    state.units.forEach(function (u, i) {
+      var el = $('[data-rcost="' + i + '"]'); if (!el) return;
+      var m = parseScaled(u.roomArea, 2) * 10n;
+      var drv = String(u.driver || '').trim();
+      if (m > 0n) el.textContent = 'تكلفة الغرفة: ' + fmtScaled(m) + ' ريال شهرياً' + (drv ? ' — السائق: ' + drv : '');
+      else if (drv) el.textContent = 'اكتب مساحة الغرفة (م²) لاحتساب تكلفتها — السائق: ' + drv;
+      else el.textContent = '';
+    });
   }
 
   function refreshAreasInfo(c) {
     var na = $('#notice-areas');
     if (c.sumArea === 0n) { na.innerHTML = '<p>اكتب مساحة شقة واحدة على الأقل.</p>'; na.hidden = false; } else { na.hidden = true; }
     var park = state.units.reduce(function (s, u) { return s + parkCount(u); }, 0);
-    var rooms = state.units.reduce(function (s, u) { return s + (u.room ? 1 : 0); }, 0);
-    $('#area-total').innerHTML = '<span>إجمالي المساحة: ' + L(fmtArea(c.sumArea)) + ' م²</span><span>المواقف: ' + L(String(park)) + '</span><span>غرف السائق: ' + L(String(rooms)) + '</span>';
+    var rooms = c.roomAnn.filter(function (m) { return m > 0n; }).length;
+    $('#area-total').innerHTML = '<span>إجمالي المساحة: ' + L(fmtArea(c.sumArea)) + ' م²</span><span>المواقف: ' + L(String(park)) + '</span><span>غرف السائق: ' + L(String(rooms)) + '</span><span>تكلفة الغرف: ' + L(fmtScaled(c.sumRoomMon)) + ' ريال/شهر</span>';
   }
 
   function update() {
     var c = compute();
     refreshAreasInfo(c);
+    updateRoomCostLabels();
     updateExpenseCards(c);
     if (tab === 'result') renderResult(c);
     persist();
@@ -877,7 +949,7 @@ function exact4(num, sum) {
     }
     clearTimeout(armTimer);
     b.classList.remove('armed'); b.textContent = RESET_LABEL;
-    state = sampleState(); openUnits = {}; rebuildAll(); say('تم مسح المصروفات وإعادة بيانات الشقق إلى الأصل.');
+    state = sampleState(); openUnits = {}; rebuildAll(); say('تم مسح المصروفات وإعادة بيانات الشقق وغرف السائق إلى الأصل.');
   });
 
   /* ---------- المشاركة ---------- */
@@ -888,32 +960,61 @@ function exact4(num, sum) {
     lines.push('الإجمالي: ' + fmtScaled(c.grand) + ' ريال في السنة (حوالي ' + fmtScaled(monthly(c.grand)) + ' في الشهر)');
     lines.push('');
     state.units.forEach(function (u, i) {
-      lines.push(unitLabel(i) + ' - ' + ownerOf(u, i) + ' (' + fmtArea(c.areas[i]) + ' م²): ' + fmtScaled(c.unitTotals[i]) + ' ريال في السنة، ' + fmtScaled(monthly(c.unitTotals[i])) + ' في الشهر');
+      lines.push(unitLabel(i) + ' - ' + ownerOf(u, i) + ' (' + fmtArea(c.areas[i]) + ' م²): ' + fmtScaled(c.payAnn[i]) + ' ريال في السنة، ' + fmtScaled(c.payMon[i]) + ' في الشهر' + (c.roomAnn[i] > 0n ? ' (منها غرفة السائق ' + fmtScaled(c.roomAnn[i]) + ' ريال في السنة)' : ''));
     });
     lines.push('');
-    lines.push('المجموع: ' + fmtScaled(sumBig(c.unitTotals)) + ' ريال في السنة');
+    lines.push('المجموع: ' + fmtScaled(sumBig(c.payAnn)) + ' ريال في السنة');
+    var names = {}, norder = [];
+    c.exps.forEach(function (x) {
+      var k = expName(x.e);
+      if (!names[k]) { names[k] = 0n; norder.push(k); }
+      names[k] += x.total;
+    });
+    if (norder.length) {
+      lines.push('');
+      lines.push('حسب المصروف:');
+      norder.forEach(function (k) {
+        lines.push(k + ': ' + fmtScaled(names[k]) + ' ريال في السنة (شهرياً ' + fmtScaled(monthly(names[k])) + ')');
+      });
+    }
+    if (c.sumRoomAnn > 0n) {
+      lines.push('غرف السائق: ' + c.roomAnn.filter(function (m) { return m > 0n; }).length + ' غرف، تكلفتها ' + fmtScaled(c.sumRoomMon) + ' ريال شهرياً (' + fmtScaled(c.sumRoomAnn) + ' ريال في السنة) — 10 ريال للمتر.');
+    }
     var multi = groups.filter(function (g) { return g.idx.length > 1; });
     if (multi.length) {
       lines.push('');
       lines.push('حسب المالك (أكثر من شقة):');
       multi.forEach(function (g) {
-        lines.push(g.name + ' (شقق ' + g.idx.map(function (i) { return i + 1; }).join('، ') + '): ' + fmtScaled(g.amt) + ' ريال في السنة، ' + fmtScaled(g.mon) + ' في الشهر');
+        lines.push(g.name + ' (شقق ' + g.idx.map(function (i) { return i + 1; }).join('، ') + '): ' + fmtScaled(g.payA) + ' ريال في السنة، ' + fmtScaled(g.payM) + ' في الشهر');
       });
     }
     return lines.join('\n');
   }
   function tableRows() {
     var c = compute();
-    var head = ['الشقة', 'المالك', 'المساحة (م2)', 'النسبة (%)'].concat(c.exps.map(function (x) { return expName(x.e) + ' (ريال/سنة)'; }), ['الإجمالي السنوي (ريال)', 'شهرياً (ريال)', 'المواقف', 'غرفة سائق']);
+    var head = ['الشقة', 'المالك', 'المساحة (م2)', 'النسبة (%)'].concat(c.exps.map(function (x) { return expName(x.e) + ' (ريال/سنة)'; }), ['الإجمالي السنوي (ريال)', 'شهرياً (ريال)', 'المواقف', 'اسم السائق', 'غرفة السائق (م2)', 'تكلفة الغرفة (ريال/سنة)']);
     var hasArea = c.sumArea > 0n;
     var rows = state.units.map(function (u, i) {
       var pct = hasArea ? (Number(c.areas[i]) / Number(c.sumArea) * 100).toFixed(2) : '0.00';
-      return [unitLabel(i), ownerOf(u, i), fmtScaled(c.areas[i], 2, false), pct].concat(c.exps.map(function (x) { return fmtScaled(x.shares[i], 2, false); }), [fmtScaled(c.unitTotals[i], 2, false), fmtScaled(monthly(c.unitTotals[i]), 2, false), String(parkCount(u)), u.room ? 'نعم' : 'لا']);
+      return [unitLabel(i), ownerOf(u, i), fmtScaled(c.areas[i], 2, false), pct].concat(c.exps.map(function (x) { return fmtScaled(x.shares[i], 2, false); }), [fmtScaled(c.payAnn[i], 2, false), fmtScaled(c.payMon[i], 2, false), String(parkCount(u)), String(u.driver || '').trim(), fmtScaled(parseScaled(u.roomArea, 2), 2, false), fmtScaled(c.roomAnn[i], 2, false)]);
     });
-    var monthSum = c.unitTotals.reduce(function (s, h) { return s + monthly(h); }, 0n);
+    var monthSum = sumBig(c.payMon);
     var park = state.units.reduce(function (s, u) { return s + parkCount(u); }, 0);
-    var rooms = state.units.reduce(function (s, u) { return s + (u.room ? 1 : 0); }, 0);
-    rows.push(['الإجمالي', '', fmtScaled(c.sumArea, 2, false), hasArea ? '100.00' : '0.00'].concat(c.exps.map(function (x) { return fmtScaled(sumBig(x.shares), 2, false); }), [fmtScaled(sumBig(c.unitTotals), 2, false), fmtScaled(monthSum, 2, false), String(park), String(rooms)]));
+    var roomAreaSum = sumBig(state.units.map(function (u) { return parseScaled(u.roomArea, 2); }));
+    rows.push(['الإجمالي', '', fmtScaled(c.sumArea, 2, false), hasArea ? '100.00' : '0.00'].concat(c.exps.map(function (x) { return fmtScaled(sumBig(x.shares), 2, false); }), [fmtScaled(sumBig(c.payAnn), 2, false), fmtScaled(monthSum, 2, false), String(park), '', fmtScaled(roomAreaSum, 2, false), fmtScaled(c.sumRoomAnn, 2, false)]));
+    var names = {}, norder = [];
+    c.exps.forEach(function (x) {
+      var k = expName(x.e);
+      if (!names[k]) { names[k] = 0n; norder.push(k); }
+      names[k] += x.total;
+    });
+    if (norder.length) {
+      rows.push([]);
+      rows.push(['حسب المصروف', '', '', '']);
+      norder.forEach(function (k) {
+        rows.push([k, '', fmtScaled(names[k], 2, false) + ' ريال/سنة', fmtScaled(monthly(names[k]), 2, false) + ' ريال/شهر']);
+      });
+    }
     return [head].concat(rows);
   }
   function csvCell(v) { v = String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
